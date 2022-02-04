@@ -1,0 +1,24 @@
+.login-container{
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100% !important;
+    height: 100vh;
+    background-color: #282c34;
+}
+.login-card{
+    width: 500px;
+    max-height: 350px;
+}
+
+@media all and (min-width: 480px) {
+    .Login {
+      padding: 60px 0;
+    }
+  
+    .Login form {
+      margin: 0 auto;
+      max-width: 320px;
+    }
+  }

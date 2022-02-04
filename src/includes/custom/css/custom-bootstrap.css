@@ -1,0 +1,17 @@
+.card{
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.form-label{
+    font-weight: 500;
+}
+
+label{
+    margin-bottom: .2rem !important;
+}
+
+.btn-toolbar>*+* {
+    margin-left: .5em;
+}

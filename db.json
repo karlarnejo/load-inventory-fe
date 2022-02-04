@@ -1,0 +1,21 @@
+{
+  "auth": [
+    {
+      "id": "1",
+      "email": "test@gmail.com",
+      "password": "test",
+      "authToken": "tokenSample"
+    }
+  ],
+  "GET_CUSTOMER_LIST": [
+    {
+      "id": 1,
+      "firstName": "Melissa",
+      "lastName": "Claret",
+      "middleName": "Dequito",
+      "address": "Cebu City",
+      "contactNo": "091234567891",
+      "gender": "Female"
+    }
+  ]
+}
