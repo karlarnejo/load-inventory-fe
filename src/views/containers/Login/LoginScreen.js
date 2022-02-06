@@ -33,9 +33,9 @@ const LoginScreen = () => {
     event.preventDefault();
     dispatch(authOperations.loginUser(email, password))
       .then((result) => {
-        console.log("result ", result)
+        // console.log("result ", result)
         if (result === null) {
-          console.log("asdasd")
+          // console.log("asdasd")
           setErrorMessage("Incorrect username/password.");
         }
       });
