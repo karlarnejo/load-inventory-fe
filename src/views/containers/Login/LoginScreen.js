@@ -33,9 +33,7 @@ const LoginScreen = () => {
     event.preventDefault();
     dispatch(authOperations.loginUser(email, password))
       .then((result) => {
-        // console.log("result ", result)
-        if (result === null) {
-          // console.log("asdasd")
+        if (result == null) {
           setErrorMessage("Incorrect username/password.");
         }
       });
@@ -66,7 +64,7 @@ const LoginScreen = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <h5>{errorMessage}</h5>
+            <h5 className="mt-2" >{errorMessage}</h5>
           </Form.Group>
           <Button block size="lg" type="submit" disabled={!validateForm()}>
             Login
