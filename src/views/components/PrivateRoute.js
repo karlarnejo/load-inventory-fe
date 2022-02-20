@@ -8,12 +8,12 @@ import { LOGIN_ROUTE } from '../containers/Login/routes';
 const PrivateRoute = (props) => {
     
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-    const user = useSelector(state => state.auth.account)
-    const logoutUser = authOperations.logoutUser
+    // const user = useSelector(state => state.auth.account)
+    // const logoutUser = authOperations.logoutUser
 
     return isAuthenticated ?
         <div>
-            <MainHeader {...props} isAuthenticated={isAuthenticated} logoutUser={logoutUser}/>
+            {/* <MainHeader {...props} isAuthenticated={isAuthenticated} logoutUser={logoutUser}/> */}
             <Route path={props.path} component={props.component} />
         </div>
         : (

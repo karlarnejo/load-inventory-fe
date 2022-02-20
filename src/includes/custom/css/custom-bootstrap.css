@@ -15,3 +15,14 @@ label{
 .btn-toolbar>*+* {
     margin-left: .5em;
 }
+
+.padding-small {
+    padding: 4px;
+    display: inline-flex;
+}
+
+.btn-dropdown {
+    color: #555555;
+    border: 1px solid #99A59F;
+    background-color: #FFFFFF;
+}

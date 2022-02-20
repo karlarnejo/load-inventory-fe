@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { operations as landingPageOperations } from '../LandingPage/state';
 import CustomerTable from '../../components/TableTemplate';
+import { Container } from 'react-bootstrap';
+import Sidebar from '../../components/Sidebar'
+import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
+import { authOperations } from '../Login/state';
 
 const RootPage = () => {
 
@@ -11,6 +15,7 @@ const RootPage = () => {
     const tableHeaderReducer = useSelector(state => state.landingPage.table.tableHeader)
     const tableColumnsReducer = useSelector(state => state.landingPage.table.tableColumns)
 
+    const [collapseSidebar, setCollapseSidebar] = useState(false)
     const [customerData, setCustomerData] = useState([])
     const [pageInput, setPageInput] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
@@ -18,6 +23,7 @@ const RootPage = () => {
     const [sortItem, setSortItem] = useState("firstName")
     const [sortDirection, setSortDirection] = useState("Ascending")
     const [itemsPerPage, setItemsPerPage] = useState(5)
+    const logoutUser = authOperations.logoutUser
 
     const submitForm = () => {
         let payload = {
@@ -86,56 +92,71 @@ const RootPage = () => {
         setPageInput(1)
     }
 
+    const handleToggleSidebar = () => {
+        collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
+    }
+
     useEffect(() => {
         submitForm()
     }, [])
 
     useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-        }
-        else {
-            submitForm()
-        }
-        
+        isInitialMount.current ? isInitialMount.current = false : submitForm()
     }, [itemsPerPage, pageInput, sortItem, sortDirection, query])
 
     return (
-        <center>
-            <h1>ReactJS Codebase</h1>
-            <CustomerTable
-                tableHeader={tableHeaderReducer}
-                tableColumns={tableColumnsReducer}
-                tableList={customerData.map((data) => {
-                    return (data)
-                })}
-                rowButtons={[
-                    { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
-                    { variant: "btn btn-success", label: "Edit", onClick: (() => handleEditRow()) },
-                    { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
+        <>
+            <Sidebar 
+                collapseSidebar={collapseSidebar} 
+                handleToggleSidebar={() => handleToggleSidebar()}
+                sidebarLogo={"LOGO"}
+                sidebarItems={[
+                    {icon: <RiMessage3Line className="sidebar-icon" />, name: "Dashboard"},
+                    {icon: <RiChat4Fill className="sidebar-icon" />, name: "Chat"},
+                    {icon: <RiTeamFill className="sidebar-icon" />, name: "Teams"},
+                    {icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks"},
+                    {icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics"},
+                    {icon: <RiLogoutBoxFill className="sidebar-icon" onClick={() => dispatch(logoutUser())}/>, name: "Logout"}
                 ]}
-                pagination={{
-                    name: 'currentPage',
-                    id: 'currentPage',
-                    currentPage: pageInput,
-                    size: 'sm',
-                    type: "text",
-                    totalPages: totalPages,
-                    onChange: (() => handleCurrentPage()),
-                    onKeyDown: (() => handleNavigatePage()),
-                    onClickNext: (() => handleNext()),
-                    onClickPrev: (() => handlePrev()),
-                    onClickLast: (() => handleLastPage()),
-                    onClickFirst: (() => handleFirstPage()),
-                    sortItem: sortItem,
-                    sortDirection: sortDirection,
-                    itemsPerPage: itemsPerPage,
-                    handleSortBy: handleSortBy,
-                    handleSortDirection: handleSortDirection,
-                    handleItemPerPageSelect: handleItemPerPageSelect
-                }}
             />
-        </center>
+                <div className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
+                    <Container fluid>
+                        <h1>ReactJS Codebase</h1>
+                        <CustomerTable
+                            tableHeader={tableHeaderReducer}
+                            tableColumns={tableColumnsReducer}
+                            tableList={customerData.map((data) => {
+                                return (data)
+                            })}
+                            rowButtons={[
+                                { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
+                                { variant: "btn btn-success", label: "Edit", onClick: (() => handleEditRow()) },
+                                { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
+                            ]}
+                            pagination={{
+                                name: 'currentPage',
+                                id: 'currentPage',
+                                currentPage: pageInput,
+                                size: 'sm',
+                                type: "text",
+                                totalPages: totalPages,
+                                onChange: (() => handleCurrentPage()),
+                                onKeyDown: (() => handleNavigatePage()),
+                                onClickNext: (() => handleNext()),
+                                onClickPrev: (() => handlePrev()),
+                                onClickLast: (() => handleLastPage()),
+                                onClickFirst: (() => handleFirstPage()),
+                                sortItem: sortItem,
+                                sortDirection: sortDirection,
+                                itemsPerPage: itemsPerPage,
+                                handleSortBy: handleSortBy,
+                                handleSortDirection: handleSortDirection,
+                                handleItemPerPageSelect: handleItemPerPageSelect
+                            }}
+                        />
+                    </Container>
+                </div>
+        </>
     );
 }
 
