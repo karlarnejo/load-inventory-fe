@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { authOperations } from './state'
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, ButtonGroup, Form, Nav } from "react-bootstrap";
+import { Button, Form, Nav } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import '../../../includes/custom/css/login.css';
 import { ROOT } from "../../../config/settings";
@@ -12,7 +12,7 @@ const LoginScreen = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [logged, setLogged] = useState(false);
+    // const [logged, setLogged] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
@@ -21,13 +21,13 @@ const LoginScreen = () => {
         return 0 < email.length && 0 < password.length;
     }
 
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value)
-    }
+    // const handlePasswordChange = (event) => {
+    //     setPassword(event.target.value)
+    // }
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value)
-    }
+    // const handleEmailChange = (event) => {
+    //     setEmail(event.target.value)
+    // }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -56,9 +56,8 @@ const LoginScreen = () => {
                     </div>
                     <Form onSubmit={handleSubmit}>
                         <div className="p-4">
-                            <Form.Group controlId="email">
+                            <Form.Group>
                                 <Form.Control
-                                    type="text"
                                     id="username"
                                     type="email"
                                     autoFocus
@@ -67,7 +66,7 @@ const LoginScreen = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Form.Group>
-                            <Form.Group controlId="password">
+                            <Form.Group>
                                 <Form.Control
                                     placeholder="Password"
                                     type="password"

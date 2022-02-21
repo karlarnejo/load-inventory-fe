@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, FormLabel } from 'react-bootstrap';
-import EllipsisText from "react-ellipsis-text";
+// import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
 
 let TableTemplate = (props) =>{

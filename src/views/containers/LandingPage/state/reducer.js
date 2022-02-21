@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils";
 import * as types from "./types";
 
 const defaultState = {

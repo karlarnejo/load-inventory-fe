@@ -116,7 +116,7 @@ const RootPage = () => {
                     {icon: <RiTeamFill className="sidebar-icon" />, name: "Teams"},
                     {icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks"},
                     {icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics"},
-                    {icon: <RiLogoutBoxFill className="sidebar-icon" onClick={() => dispatch(logoutUser())}/>, name: "Logout"}
+                    {icon: <RiLogoutBoxFill className="sidebar-icon" />, name: "Logout", onclick: (() => dispatch(logoutUser()))}
                 ]}
             />
                 <div className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>

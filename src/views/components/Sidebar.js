@@ -12,7 +12,7 @@ let Sidebar = (props) => {
             <div className="sidebar-items">
                 {props.sidebarItems.map((data) => {
                     return(
-                        <div className="item">
+                        <div className="item" onClick={data.onclick ? () => {data.onclick()} : null}>
                             {data.icon}
                             <span className="sidebar-text">{data.name}</span>
                         </div>

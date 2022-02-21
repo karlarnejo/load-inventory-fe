@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { REST_SERVICE_URL_ROOT, CLIENT_ID, CLIENT_SECRET, PERSISTED_STATE_KEY } from '../config/settings';
-import configureStore from '../store';
 import Qs from 'qs';
 
 class ApiService {

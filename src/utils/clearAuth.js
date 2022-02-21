@@ -1,5 +1,7 @@
 import { PERSISTED_STATE_KEY } from "../config/settings";
 
-export default function() {
-  localStorage.removeItem(PERSISTED_STATE_KEY);
+const logout = () => {
+    localStorage.removeItem(PERSISTED_STATE_KEY);
 }
+
+export default logout;
