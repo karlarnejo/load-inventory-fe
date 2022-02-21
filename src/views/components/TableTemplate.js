@@ -130,8 +130,7 @@ let TableTemplate = (props) =>{
                             </Dropdown>
                         </Form.Row>
                         <Form.Row className='ml-auto'>
-
-                            <Pagination style={{ float: 'right', marginTop: 15 }} size='md'>
+                            <Pagination style={{ marginRight: '5px', float: 'right', marginTop: 15 }} size='md'>
                                 <InputGroup size="md">
                                     <InputGroup.Prepend>
                                         <Pagination.First disabled={firstPrev || props.disabledLoad} onClick={() => { props.pagination.onClickFirst() }} />
@@ -157,6 +156,7 @@ let TableTemplate = (props) =>{
     return(
         <div>
             {pagination()}
+            <hr/>
             <Table condensed="true" hover bordered responsive>
                 <thead>
                     <tr>{TableHeader}</tr>

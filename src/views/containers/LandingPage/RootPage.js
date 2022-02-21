@@ -6,6 +6,8 @@ import { Container } from 'react-bootstrap';
 import Sidebar from '../../components/Sidebar'
 import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
 import { authOperations } from '../Login/state';
+import { Row, Col, Card } from 'react-bootstrap';
+import CardTemplate from '../../components/CardTemplate';
 
 const RootPage = () => {
 
@@ -38,7 +40,7 @@ const RootPage = () => {
             .then((response) => {
                 setCustomerData(response.data)
                 setTotalPages(response.totalPages)
-        })
+            })
     }
 
     const handleCurrentPage = () => {
@@ -106,56 +108,88 @@ const RootPage = () => {
 
     return (
         <>
-            <Sidebar 
-                collapseSidebar={collapseSidebar} 
+            <Sidebar
+                collapseSidebar={collapseSidebar}
                 handleToggleSidebar={() => handleToggleSidebar()}
                 sidebarLogo={"LOGO"}
                 sidebarItems={[
-                    {icon: <RiMessage3Line className="sidebar-icon" />, name: "Dashboard"},
-                    {icon: <RiChat4Fill className="sidebar-icon" />, name: "Chat"},
-                    {icon: <RiTeamFill className="sidebar-icon" />, name: "Teams"},
-                    {icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks"},
-                    {icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics"},
-                    {icon: <RiLogoutBoxFill className="sidebar-icon" />, name: "Logout", onclick: (() => dispatch(logoutUser()))}
+                    { icon: <RiMessage3Line className="sidebar-icon" />, name: "Dashboard" },
+                    { icon: <RiChat4Fill className="sidebar-icon" />, name: "Chat" },
+                    { icon: <RiTeamFill className="sidebar-icon" />, name: "Teams" },
+                    { icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks" },
+                    { icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics" },
+                    { icon: <RiLogoutBoxFill className="sidebar-icon" />, name: "Logout", onclick: (() => dispatch(logoutUser())) }
                 ]}
             />
-                <div className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
-                    <Container fluid>
-                        <h1>ReactJS Codebase</h1>
-                        <CustomerTable
-                            tableHeader={tableHeaderReducer}
-                            tableColumns={tableColumnsReducer}
-                            tableList={customerData.map((data) => {
-                                return (data)
-                            })}
-                            rowButtons={[
-                                { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
-                                { variant: "btn btn-success", label: "Edit", onClick: (() => handleEditRow()) },
-                                { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
-                            ]}
-                            pagination={{
-                                name: 'currentPage',
-                                id: 'currentPage',
-                                currentPage: pageInput,
-                                size: 'sm',
-                                type: "text",
-                                totalPages: totalPages,
-                                onChange: (() => handleCurrentPage()),
-                                onKeyDown: (() => handleNavigatePage()),
-                                onClickNext: (() => handleNext()),
-                                onClickPrev: (() => handlePrev()),
-                                onClickLast: (() => handleLastPage()),
-                                onClickFirst: (() => handleFirstPage()),
-                                sortItem: sortItem,
-                                sortDirection: sortDirection,
-                                itemsPerPage: itemsPerPage,
-                                handleSortBy: handleSortBy,
-                                handleSortDirection: handleSortDirection,
-                                handleItemPerPageSelect: handleItemPerPageSelect
-                            }}
-                        />
-                    </Container>
-                </div>
+
+            <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
+                <Container fluid>
+                    <Row>
+                        <Col xs={4}>
+                            <CardTemplate
+                                cardTitle='Smart'
+                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                cardButtonName='Go'
+                            // onClick
+                            />
+                        </Col>
+                        <Col xs={4}>
+                            <CardTemplate
+                                cardTitle='Smart'
+                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                cardButtonName='Go'
+                            // onClick
+                            />
+                        </Col>
+                        <Col xs={4}>
+                            <CardTemplate
+                                cardTitle='Smart'
+                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                cardButtonName='Go'
+                            // onClick
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12}>
+                            <Card>
+                                <CustomerTable
+                                    tableHeader={tableHeaderReducer}
+                                    tableColumns={tableColumnsReducer}
+                                    tableList={customerData.map((data) => {
+                                        return (data)
+                                    })}
+                                    rowButtons={[
+                                        { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
+                                        { variant: "btn btn-success", label: "Edit", onClick: (() => handleEditRow()) },
+                                        { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
+                                    ]}
+                                    pagination={{
+                                        name: 'currentPage',
+                                        id: 'currentPage',
+                                        currentPage: pageInput,
+                                        size: 'sm',
+                                        type: "text",
+                                        totalPages: totalPages,
+                                        onChange: (() => handleCurrentPage()),
+                                        onKeyDown: (() => handleNavigatePage()),
+                                        onClickNext: (() => handleNext()),
+                                        onClickPrev: (() => handlePrev()),
+                                        onClickLast: (() => handleLastPage()),
+                                        onClickFirst: (() => handleFirstPage()),
+                                        sortItem: sortItem,
+                                        sortDirection: sortDirection,
+                                        itemsPerPage: itemsPerPage,
+                                        handleSortBy: handleSortBy,
+                                        handleSortDirection: handleSortDirection,
+                                        handleItemPerPageSelect: handleItemPerPageSelect
+                                    }}
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </>
     );
 }
