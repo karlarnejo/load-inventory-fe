@@ -42,8 +42,18 @@ const RootPage = () => {
             })
     }
 
-    const handleCurrentPage = () => {
-
+    const handleCurrentPage = (e) => {
+        if ('' === e.target.value) {
+            setPageInput(e.target.value)
+        } 
+        else {
+            const re = /^[0-9\b]+$/;
+            if (re.test(e.target.value)) {
+                if (e.target.value <= totalPages && e.target.value >= 1) {
+                    setPageInput(parseInt(e.target.value))
+                }
+            }
+        }
     }
 
     const handleEditRow = () => {
@@ -95,7 +105,15 @@ const RootPage = () => {
         //prevent this block from running during mount.
         //all useEffect instances always run on mount. 
         //Need a checker to prevent mounting except for the blank ones.
-        isInitialMount.current ? isInitialMount.current = false : submitForm()
+        // isInitialMount.current ? isInitialMount.current = false : submitForm()
+        if(isInitialMount.current) {
+            isInitialMount.current = false
+        }
+        else {
+            if(pageInput) {
+                submitForm()
+            }
+        }
     }, [itemsPerPage, pageInput, sortDataReducer, query])
 
     return (
@@ -167,7 +185,7 @@ const RootPage = () => {
                                         size: 'sm',
                                         type: "text",
                                         totalPages: totalPages,
-                                        onChange: (() => handleCurrentPage()),
+                                        onChange: ((e) => handleCurrentPage(e)),
                                         onKeyDown: (() => handleNavigatePage()),
                                         onClickNext: (() => handleNext()),
                                         onClickPrev: (() => handlePrev()),

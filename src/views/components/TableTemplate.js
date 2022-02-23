@@ -99,7 +99,7 @@ let TableTemplate = (props) => {
                 type={props.pagination.type}
                 placeholder={props.pagination.currentPage}
                 value={props.pagination.currentPage}
-                onChange={props.pagination.onChange}
+                onChange={(e) => props.pagination.onChange(e)}
                 onKeyDown={props.pagination.onKeyDown}
                 style={{ width: '100px' }}
             />);
@@ -108,10 +108,10 @@ let TableTemplate = (props) => {
 
     const pagination = () => {
 
-        let firstPrev = (props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
+        let firstPrev = (!props.pagination.currentPage || props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
             true) : false
 
-        let nextLast = (props.pagination.currentPage === props.pagination.totalPages || props.pagination.totalPages === 0) ? (
+        let nextLast = (!props.pagination.currentPage || props.pagination.currentPage === props.pagination.totalPages || props.pagination.totalPages === 0) ? (
             true) : false
 
         if (props.tableList) {
