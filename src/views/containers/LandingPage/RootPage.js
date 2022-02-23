@@ -16,22 +16,21 @@ const RootPage = () => {
 
     const tableHeaderReducer = useSelector(state => state.landingPage.table.tableHeader)
     const tableColumnsReducer = useSelector(state => state.landingPage.table.tableColumns)
+    const sortDataReducer = useSelector(state => state.landingPage.sortOptions)
 
     const [collapseSidebar, setCollapseSidebar] = useState(false)
     const [customerData, setCustomerData] = useState([])
     const [pageInput, setPageInput] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [query, setQuery] = useState("A")
-    const [sortItem, setSortItem] = useState("firstName")
-    const [sortDirection, setSortDirection] = useState("Ascending")
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const logoutUser = authOperations.logoutUser
 
     const submitForm = () => {
         let payload = {
             query: query,
-            sortDirection: sortDirection,
-            sortItem: sortItem,
+            sortDirection: sortDataReducer.sortDirection,
+            sortItem: sortDataReducer.sortItem,
             itemsPerPage: itemsPerPage,
             pageInput: pageInput,
         };
@@ -79,16 +78,6 @@ const RootPage = () => {
         setPageInput(1)
     }
 
-    const handleSortBy = (event) => {
-        setSortItem(event)
-        setPageInput(1)
-    }
-
-    const handleSortDirection = (event) => {
-        setSortDirection(event)
-        setPageInput(1)
-    }
-
     const handleItemPerPageSelect = (event) => {
         setItemsPerPage(parseInt(event))
         setPageInput(1)
@@ -103,8 +92,11 @@ const RootPage = () => {
     }, [])
 
     useEffect(() => {
+        //prevent this block from running during mount.
+        //all useEffect instances always run on mount. 
+        //Need a checker to prevent mounting except for the blank ones.
         isInitialMount.current ? isInitialMount.current = false : submitForm()
-    }, [itemsPerPage, pageInput, sortItem, sortDirection, query])
+    }, [itemsPerPage, pageInput, sortDataReducer, query])
 
     return (
         <>
@@ -124,32 +116,36 @@ const RootPage = () => {
 
             <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
                 <Container fluid>
-                    <Row>
-                        <Col xs={4}>
-                            <CardTemplate
-                                cardTitle='Smart'
-                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                cardButtonName='Go'
-                            // onClick
-                            />
-                        </Col>
-                        <Col xs={4}>
-                            <CardTemplate
-                                cardTitle='Smart'
-                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                cardButtonName='Go'
-                            // onClick
-                            />
-                        </Col>
-                        <Col xs={4}>
-                            <CardTemplate
-                                cardTitle='Smart'
-                                cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                cardButtonName='Go'
-                            // onClick
-                            />
-                        </Col>
-                    </Row>
+                    <Card>
+
+                        <Row>
+                            <Col xs={4}>
+                                <CardTemplate
+                                    cardTitle='Smart'
+                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                    cardButtonName='Go'
+                                // onClick
+                                />
+                            </Col>
+                            <Col xs={4}>
+                                <CardTemplate
+                                    cardTitle='Smart'
+                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                    cardButtonName='Go'
+                                // onClick
+                                />
+                            </Col>
+                            <Col xs={4}>
+                                <CardTemplate
+                                    cardTitle='Smart'
+                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
+                                    cardButtonName='Go'
+                                // onClick
+                                />
+                            </Col>
+                        </Row>
+                    </Card>
+
                     <Row>
                         <Col xs={12}>
                             <Card>
@@ -177,11 +173,7 @@ const RootPage = () => {
                                         onClickPrev: (() => handlePrev()),
                                         onClickLast: (() => handleLastPage()),
                                         onClickFirst: (() => handleFirstPage()),
-                                        sortItem: sortItem,
-                                        sortDirection: sortDirection,
                                         itemsPerPage: itemsPerPage,
-                                        handleSortBy: handleSortBy,
-                                        handleSortDirection: handleSortDirection,
                                         handleItemPerPageSelect: handleItemPerPageSelect
                                     }}
                                 />

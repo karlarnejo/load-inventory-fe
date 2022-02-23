@@ -1,18 +1,78 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, FormLabel } from 'react-bootstrap';
 // import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
+import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
+import { sortOptions } from '../containers/LandingPage/state/actions';
 
-let TableTemplate = (props) =>{
-    
+let TableTemplate = (props) => {
+
+    const dispatch = useDispatch();
+
+    const sortDataReducer = useSelector(state => state.landingPage.sortOptions)
+
+    //Renders row data
+    const RenderRow = (data) => {
+        return (
+            props.tableColumns.map((column, i) => {
+                return (
+                    <td key={i}>{data[column]}</td>
+                );
+            })
+        );
+    }
+
+    //Renders row buttons
+    const RenderButtons = (data) => {
+        return (
+            <td className="col-center">
+                <ButtonToolbar style={{ display: "flex", justifyContent: "center" }}>
+                    {props.rowButtons.map((button, i) => {
+                        return (
+                            <Button
+                                key={i}
+                                variant={button.variant}
+                                onClick={button.onClick.bind(this, data)}
+                            >
+                                {button.label}
+                            </Button>
+                        )
+                    })}
+                </ButtonToolbar>
+            </td>
+        );
+    }
+
+    const handleSortClick = (header) => {
+        const refinedeHeader = lodash.camelCase(header)
+        let tempSortDirection = ""
+
+        sortDataReducer.sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
+
+        const sortData = {
+            sortItem: refinedeHeader,
+            sortDirection: tempSortDirection
+        }
+
+        dispatch(sortOptions(sortData))
+    }
+
+    const headerChecker = (header) => {
+
+        return (
+            (header === lodash.startCase(sortDataReducer.sortItem) ? (sortDataReducer.sortDirection === "Ascending") ? <RiSortAsc/> : <RiSortDesc/> : null)
+        )
+    }
+
     //Renders table header
-    const TableHeader = props.tableHeader && props.tableHeader.map((header, i)=>{
-        return <th key={i}>{header}</th>;
+    const TableHeader = props.tableHeader && props.tableHeader.map((header, i) => {
+        return <th key={i} style={{ cursor: "pointer" }} onClick={() => {handleSortClick(header)}}>{headerChecker(header)} {header}</th>;
     });
 
     //Renders table row
     const TableList = props.tableList && 0 < props.tableList.length ? (
-        props.tableList.map((row, i)=>{
+        props.tableList.map((row, i) => {
             return (
                 <tr key={i}>
                     {RenderRow(row)}
@@ -22,45 +82,13 @@ let TableTemplate = (props) =>{
         })
     ) : <tr><td className="col-center" colSpan={props.tableHeader.length}>No records found</td></tr>
 
-    //Renders row data
-    function RenderRow(data){
-        return(
-            props.tableColumns.map((column, i)=>{    
-                return(
-                    <td key={i}>{data[column]}</td>
-                );
-            })
-        );
-    }
-
-    //Renders row buttons
-    function RenderButtons(data){
-        return(
-            <td className="col-center">
-                <ButtonToolbar style={{display: "flex", justifyContent: "center"}}>
-                {props.rowButtons.map((button, i)=>{    
-                    return(
-                        <Button 
-                            key={i}
-                            variant={button.variant}
-                            onClick={button.onClick.bind(this, data)} 
-                        >
-                            {button.label}
-                        </Button>
-                    )
-                })}
-                </ButtonToolbar>
-            </td>
-        );
-    }
-
-    function onKeyDown(keyEvent) {
+    const onKeyDown = (keyEvent) => {
         if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
             keyEvent.preventDefault();
         }
     }
 
-    function currentPage() {
+    const currentPage = () => {
         if (props.tableList) {
             return (<FormControl
                 disabled={props.disabledLoadEmpty}
@@ -78,7 +106,7 @@ let TableTemplate = (props) =>{
         } else return null;
     }
 
-    function pagination() {
+    const pagination = () => {
 
         let firstPrev = (props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
             true) : false
@@ -92,31 +120,7 @@ let TableTemplate = (props) =>{
                     <Form className='form-inline' onKeyDown={onKeyDown}>
                         <Form.Row >
                             <Dropdown className='padding-small'>
-                                <FormLabel className='my-1 mr-2'>{"Sort"}</FormLabel>
-                                <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='btn-dropdown' variant='light' size='md'>
-                                    {lodash.startCase(props.pagination.sortItem)}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"firstName"}>{"First Name"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"lastName"}>{"Last Name"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"middleName"}>{"Middle Name"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"address"}>{"Address"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"gender"}>{"Gender"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortBy} eventKey={"contactNo"}>{"Contact No."}</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <Dropdown className='padding-small'>
-                                <FormLabel className='my-1 mr-2'>{"Sort Order"}</FormLabel>
-                                <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='btn-dropdown' variant='light' size='md'>
-                                    {props.pagination.sortDirection}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortDirection} eventKey={"Ascending"}>{"Ascending"}</Dropdown.Item>
-                                    <Dropdown.Item onSelect={props.pagination.handleSortDirection} eventKey={"Descending"}>{"Descending"}</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <Dropdown className='padding-small'>
-                                <FormLabel className='my-1 mr-2'>{"Items"}</FormLabel>
+                                <span className='my-1 mr-2'>{"Showing"}</span>
                                 <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='btn-dropdown' variant='light' size='md'>
                                     {props.pagination.itemsPerPage}
                                 </Dropdown.Toggle>
@@ -127,6 +131,7 @@ let TableTemplate = (props) =>{
                                     <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='20'>20</Dropdown.Item>
                                     <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='25'>25</Dropdown.Item>
                                 </Dropdown.Menu>
+                                <span className='my-1 mr-2'>{"records per page"}</span>
                             </Dropdown>
                         </Form.Row>
                         <Form.Row className='ml-auto'>
@@ -152,11 +157,11 @@ let TableTemplate = (props) =>{
             );
         } else return null;
     }
-    
-    return(
+
+    return (
         <div>
             {pagination()}
-            <hr/>
+            <hr />
             <Table condensed="true" hover bordered responsive>
                 <thead>
                     <tr>{TableHeader}</tr>
@@ -165,6 +170,8 @@ let TableTemplate = (props) =>{
                     {TableList}
                 </tbody>
             </Table>
+            <hr />
+            {pagination()}
         </div>
     )
 }

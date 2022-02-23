@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import './includes/custom/css/index.css';
 import './includes/custom/css/sidebar.css';
 import './includes/custom/css/login.css';
+import './includes/custom/css/landing.css';
 import './includes/custom/css/custom-bootstrap.css';
 import { Provider } from 'react-redux';
 import configureStore, { rootRoutes } from './store.js';
