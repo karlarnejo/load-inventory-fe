@@ -6,7 +6,9 @@ export {
     authOperations
 };
 
-export default {
+const exportedObjects = {
     routes,
     reducer
 }
+
+export default exportedObjects

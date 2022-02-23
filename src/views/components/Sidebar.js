@@ -10,9 +10,9 @@ let Sidebar = (props) => {
                 <h1 className="sidebar-logo">{props.sidebarLogo}</h1>
             </div>
             <div className="sidebar-items">
-                {props.sidebarItems.map((data) => {
+                {props.sidebarItems.map((data, index) => {
                     return(
-                        <div className="item" onClick={data.onclick ? () => {data.onclick()} : null}>
+                        <div key={index} className="item" onClick={data.onclick ? () => {data.onclick()} : null}>
                             {data.icon}
                             <span className="sidebar-text">{data.name}</span>
                         </div>

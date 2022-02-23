@@ -99,7 +99,7 @@ const RootPage = () => {
 
     useEffect(() => {
         submitForm()
-    }, [])
+    }, []) //eslint-disable-line
 
     useEffect(() => {
         //prevent this block from running during mount.
@@ -114,7 +114,7 @@ const RootPage = () => {
                 submitForm()
             }
         }
-    }, [itemsPerPage, pageInput, sortDataReducer, query])
+    }, [itemsPerPage, pageInput, sortDataReducer, query]) //eslint-disable-line
 
     return (
         <>

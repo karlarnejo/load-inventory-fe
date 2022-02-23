@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, FormLabel } from 'react-bootstrap';
+import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown } from 'react-bootstrap';
 // import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
@@ -99,7 +99,7 @@ let TableTemplate = (props) => {
                 type={props.pagination.type}
                 placeholder={props.pagination.currentPage}
                 value={props.pagination.currentPage}
-                onChange={(e) => props.pagination.onChange(e)}
+                onChange={props.pagination.onChange}
                 onKeyDown={props.pagination.onKeyDown}
                 style={{ width: '100px' }}
             />);

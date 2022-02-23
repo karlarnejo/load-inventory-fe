@@ -6,7 +6,9 @@ export {
     operations
 };
 
-export default {
+const exportedObjects = {
     routes,
     reducer
 }
+
+export default exportedObjects
