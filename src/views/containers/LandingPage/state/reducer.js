@@ -9,7 +9,7 @@ const defaultState = {
             "Address",
             "Contact No.",
             "Gender",
-            "Action"
+            "Actions"
         ],
 
         tableColumns: [

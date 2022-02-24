@@ -59,15 +59,29 @@ let TableTemplate = (props) => {
     }
 
     const headerChecker = (header) => {
+        return header !== "Actions" ? true : false
+    }
+
+    const sortChecker = (header) => {
 
         return (
-            (header === lodash.startCase(sortDataReducer.sortItem) ? (sortDataReducer.sortDirection === "Ascending") ? <RiSortAsc/> : <RiSortDesc/> : null)
+            headerChecker(header) && header === lodash.startCase(sortDataReducer.sortItem) ?
+                (sortDataReducer.sortDirection === "Ascending") ?
+                    <RiSortAsc />
+                    : <RiSortDesc />
+                : null
         )
     }
 
     //Renders table header
     const TableHeader = props.tableHeader && props.tableHeader.map((header, i) => {
-        return <th key={i} style={{ cursor: "pointer" }} onClick={() => {handleSortClick(header)}}>{headerChecker(header)} {header}</th>;
+        return (
+            <th
+                key={i}
+                style={headerChecker(header) ? { cursor: "pointer" } : null}
+                onClick={headerChecker(header) ? () => { handleSortClick(header) } : null}>{sortChecker(header)} {header}
+            </th>
+        )
     });
 
     //Renders table row
@@ -118,9 +132,9 @@ let TableTemplate = (props) => {
             return (
                 <>
                     <Form className='form-inline' onKeyDown={onKeyDown}>
-                        <Form.Row >
-                            <Dropdown className='padding-small'>
-                                <span className='my-1 mr-2'>{"Showing"}</span>
+                        <Form.Row>
+                            <Dropdown >
+                                <span >{"Showing"}</span>
                                 <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='btn-dropdown' variant='light' size='md'>
                                     {props.pagination.itemsPerPage}
                                 </Dropdown.Toggle>
