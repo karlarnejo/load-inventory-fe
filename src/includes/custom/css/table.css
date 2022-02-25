@@ -1,0 +1,98 @@
+/* .ai-start {
+    align-items: flex-start;
+}
+
+.fg-1 {
+    flex-grow:1;
+}
+
+.search-bar {
+    max-width: calc(100% - 410px);
+}
+
+.search-bar {
+    max-width: 100%;
+}
+
+.spacer-1rem {
+    height: 1rem !important;
+}
+
+.small-screen-only {
+    display: block;
+}
+
+.small-screen-only {
+    display: none;
+}
+
+.button-group {
+    width: 200px;
+    justify-content: flex-end;
+}
+
+.button-group button {
+    width: 90px;
+}
+
+.button-group div:not(:last-of-type) {
+    margin-right: 1rem;
+}
+
+@media (max-width: 991px) {
+    .button-group div {
+        width: 47% !important;
+    }
+
+    .button-group .meddra-checkbox {
+        width: 100% !important;
+    }
+
+    .button-group .meddra-checkbox div:first-of-type {
+        width: 10% !important;
+    }
+
+    .button-group .meddra-checkbox div {
+        width: 80% !important;
+    }
+
+    .search-box {
+        height: 180px;
+        max-height: 180px;
+    }
+
+    .search-box .row {
+        height: 50%;
+    }
+
+    .search-box .row div,
+    .search-box .row div form,
+    .search-box .row div form div {
+        height: 100%;
+    }
+
+    .search-bar {
+        max-width: 100%;
+    }
+
+    .button-group {
+        width: 101% !important;
+        justify-content: space-between;
+    }
+
+    .button-group.ml-4 {
+        margin-left: 0 !important;
+    }
+
+    .button-group div button {
+        width: 100% !important;
+    }
+
+    .small-screen-only {
+        display: block;
+    }
+
+    .form-row {
+        margin-right: 0 !important;
+    }
+} */

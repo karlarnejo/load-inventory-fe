@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 import Sidebar from '../../components/Sidebar'
 import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
 import { authOperations } from '../Login/state';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
 
 const RootPage = () => {
@@ -22,8 +22,10 @@ const RootPage = () => {
     const [customerData, setCustomerData] = useState([])
     const [pageInput, setPageInput] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    const [query, setQuery] = useState("A")
+    const [query, setQuery] = useState("")
     const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [isResultLoading, setIsResultLoading] = useState(false)
+
     const logoutUser = authOperations.logoutUser
 
     const submitForm = () => {
@@ -45,7 +47,7 @@ const RootPage = () => {
     const handleCurrentPage = (e) => {
         if ('' === e.target.value) {
             setPageInput(e.target.value)
-        } 
+        }
         else {
             const re = /^[0-9\b]+$/;
             if (re.test(e.target.value)) {
@@ -97,6 +99,18 @@ const RootPage = () => {
         collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
     }
 
+    const handleSearchSubmit = () => {
+
+    }
+
+    const handleAutoComplete = (e) => {
+        setQuery(e.target.value)
+    }
+
+    const handleClearForm = () => {
+        setQuery("")
+    }
+
     useEffect(() => {
         submitForm()
     }, []) //eslint-disable-line
@@ -106,11 +120,11 @@ const RootPage = () => {
         //all useEffect instances always run on mount. 
         //Need a checker to prevent mounting except for the blank ones.
         // isInitialMount.current ? isInitialMount.current = false : submitForm()
-        if(isInitialMount.current) {
+        if (isInitialMount.current) {
             isInitialMount.current = false
         }
         else {
-            if(pageInput) {
+            if (pageInput) {
                 submitForm()
             }
         }
@@ -185,13 +199,18 @@ const RootPage = () => {
                                         size: 'sm',
                                         type: "text",
                                         totalPages: totalPages,
+                                        itemsPerPage: itemsPerPage,
+                                        isResultLoading: isResultLoading,
+                                        query: query,
+                                        handleSearchSubmit: (() => handleSearchSubmit()),
+                                        handleAutoComplete: ((e) => handleAutoComplete(e)),
+                                        handleClearForm: (() => handleClearForm()),
                                         onChange: ((e) => handleCurrentPage(e)),
                                         onKeyDown: (() => handleNavigatePage()),
                                         onClickNext: (() => handleNext()),
                                         onClickPrev: (() => handlePrev()),
                                         onClickLast: (() => handleLastPage()),
                                         onClickFirst: (() => handleFirstPage()),
-                                        itemsPerPage: itemsPerPage,
                                         handleItemPerPageSelect: handleItemPerPageSelect
                                     }}
                                 />
