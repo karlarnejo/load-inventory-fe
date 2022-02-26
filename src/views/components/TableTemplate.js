@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, Col, Row } from 'react-bootstrap';
+import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, Col, Row, Card } from 'react-bootstrap';
 // import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
@@ -115,70 +115,44 @@ let TableTemplate = (props) => {
                 value={props.pagination.currentPage}
                 onChange={props.pagination.onChange}
                 onKeyDown={props.pagination.onKeyDown}
-                style={{ width: '100px' }}
+                style={{ width: '70px' }}
             />);
         } else return null;
     }
 
     const pagination = () => {
 
-        let firstPrev = (!props.pagination.currentPage || props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
-            true) : false
-
-        let nextLast = (!props.pagination.currentPage || props.pagination.currentPage === props.pagination.totalPages || props.pagination.totalPages === 0) ? (
-            true) : false
-
         if (props.tableList) {
+
+            let firstPrev = (!props.pagination.currentPage || props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
+                true) : false
+
+            let nextLast = (!props.pagination.currentPage || props.pagination.currentPage === props.pagination.totalPages || props.pagination.totalPages === 0) ? (
+                true) : false
+
             return (
                 <>
                     <Row>
                         <Col sm={6}>
-                            <Form className='form-inline ai-start' onSubmit={props.pagination.handleSearchSubmit()}>
-                                <Form.Row className='fg-1 mr-4 mt-3 search-bar'>
-                                    <Form.Control
-                                        // disabled={isResultLoading ? true : false}
-                                        className="searchField"
-                                        type="text"
-                                        placeholder={"Search"}
-                                        value={props.pagination.query}
-                                        size='md'
-                                        id='search'
-                                        list='searchbar'
-                                        onChange={props.pagination.handleAutoComplete}
-                                        autoComplete="off"
-                                    />
-                                </Form.Row>
-                                {/* <div className="spacer-1rem col-md-12 small-screen-only"></div> */}
-                                <Form.Row className="mr-0 button-group mt-3" style={{ width: '100% !important' }}>
-                                    <div className="search-button mr-2">
-                                        <Button type="submit" className="btn-success ml-auto" disabled={props.pagination.isResultLoading ? true : false}>{"Search"}</Button>
-                                    </div>
-                                    <div className="clear-button">
-                                        <button type="button" onClick={props.pagination.handleClearForm} className="btn btn-danger" disabled={props.pagination.isResultLoading ? true : false}>{"Clear"}</button>
-                                    </div>
-                                </Form.Row>
-                            </Form>
+                            <Dropdown className=' mt-1'>
+                                <span className='mr-1 dropdown-size'>{"Showing"}</span>
+                                <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='dropdown-size btn-dropdown' variant='light' size='sm'>
+                                    {props.pagination.itemsPerPage}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='5'>5</Dropdown.Item>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='10'>10</Dropdown.Item>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='15'>15</Dropdown.Item>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='20'>20</Dropdown.Item>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='25'>25</Dropdown.Item>
+                                </Dropdown.Menu>
+                                <span className='ml-1 mr-2 dropdown-size'>{"entries"}</span>
+                            </Dropdown>
                         </Col>
                         <Col sm={6}>
-                            <Form className='form-inline' onKeyDown={onKeyDown}>
-                                <Form.Row>
-                                    <Dropdown >
-                                        <span className='my-1 mr-2'>{"Showing"}</span>
-                                        <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='btn-dropdown' variant='light' size='md'>
-                                            {props.pagination.itemsPerPage}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='5'>5</Dropdown.Item>
-                                            <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='10'>10</Dropdown.Item>
-                                            <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='15'>15</Dropdown.Item>
-                                            <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='20'>20</Dropdown.Item>
-                                            <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='25'>25</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                        <span className='my-1 mr-2'>{"records per page"}</span>
-                                    </Dropdown>
-                                </Form.Row>
-                                <Form.Row className='ml-auto'>
-                                    <Pagination style={{ marginRight: '5px', float: 'right', marginTop: 15 }} size='md'>
+                            <Form className='form-inline float-right ml-auto' onKeyDown={onKeyDown}>
+                                <Form.Row className='fg-1 mr-4 search-bar'>
+                                    <Pagination style={{ marginRight: '5px', float: 'right'}} size='md'>
                                         <InputGroup size="md">
                                             <InputGroup.Prepend>
                                                 <Pagination.First disabled={firstPrev || props.disabledLoad} onClick={() => { props.pagination.onClickFirst() }} />
@@ -198,6 +172,49 @@ let TableTemplate = (props) => {
                             </Form>
                         </Col>
                     </Row>
+                </>
+            )
+        }
+        else return null;
+    }
+
+    const itemsperPageDropdown = () => {
+
+        if (props.tableList) {
+            return (
+                <>
+                    <Row>
+                        <Col className='mt-4' sm={6}>
+                            <Button className='btn-success'>Add Record</Button>
+                        </Col>
+                        <Col sm={6}>
+                            <Form className='form-inline ai-start' onSubmit={props.pagination.handleSearchSubmit()}>
+                                <Form.Row className='ml-auto mr-4 mt-3'>
+                                    <Form.Control
+                                        // disabled={isResultLoading ? true : false}
+                                        className="searchField"
+                                        type="text"
+                                        placeholder={"Search"}
+                                        value={props.pagination.query}
+                                        size='md'
+                                        id='search'
+                                        list='searchbar'
+                                        onChange={props.pagination.handleAutoComplete}
+                                        autoComplete="off"
+                                    />
+                                </Form.Row>
+                                <Form.Row className="mr-0 button-group mt-3" style={{ width: '100% !important' }}>
+                                    <div className="search-button mr-2">
+                                        <Button type="submit" className="btn-success ml-auto" disabled={props.pagination.isResultLoading ? true : false}>{"Search"}</Button>
+                                    </div>
+                                    <div className="clear-button">
+                                        <button type="button" onClick={props.pagination.handleClearForm} className="btn btn-danger" disabled={props.pagination.isResultLoading ? true : false}>{"Clear"}</button>
+                                    </div>
+                                </Form.Row>
+
+                            </Form>
+                        </Col>
+                    </Row>
 
                 </>
             );
@@ -206,16 +223,19 @@ let TableTemplate = (props) => {
 
     return (
         <div>
-            {pagination()}
-            <hr />
-            <Table condensed="true" hover bordered responsive>
-                <thead>
-                    <tr>{TableHeader}</tr>
-                </thead>
-                <tbody>
-                    {TableList}
-                </tbody>
-            </Table>
+            <Card>
+                {itemsperPageDropdown()}
+                <hr />
+                <Table condensed="true" hover bordered responsive>
+                    <thead>
+                        <tr>{TableHeader}</tr>
+                    </thead>
+                    <tbody>
+                        {TableList}
+                    </tbody>
+                </Table>
+                {pagination()}
+            </Card>
         </div>
     )
 }

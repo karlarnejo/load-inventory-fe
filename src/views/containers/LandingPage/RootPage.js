@@ -189,7 +189,7 @@ const RootPage = () => {
                                     })}
                                     rowButtons={[
                                         { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
-                                        { variant: "btn btn-success", label: "Edit", onClick: (() => handleEditRow()) },
+                                        { variant: "btn btn-primary", label: "Edit", onClick: (() => handleEditRow()) },
                                         { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
                                     ]}
                                     pagination={{
