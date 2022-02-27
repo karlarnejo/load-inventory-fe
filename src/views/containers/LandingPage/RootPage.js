@@ -8,6 +8,7 @@ import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, R
 import { authOperations } from '../Login/state';
 import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
+import lodash from 'lodash'
 
 const RootPage = () => {
 
@@ -16,7 +17,6 @@ const RootPage = () => {
 
     const tableHeaderReducer = useSelector(state => state.landingPage.table.tableHeader)
     const tableColumnsReducer = useSelector(state => state.landingPage.table.tableColumns)
-    const sortDataReducer = useSelector(state => state.landingPage.sortOptions)
 
     const [collapseSidebar, setCollapseSidebar] = useState(false)
     const [customerData, setCustomerData] = useState([])
@@ -25,14 +25,16 @@ const RootPage = () => {
     const [query, setQuery] = useState("")
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [isResultLoading, setIsResultLoading] = useState(false)
+    const [sortItem, setSortItem] = useState("firstName")
+    const [sortDirection, setSortDirection] = useState("Ascending")
 
     const logoutUser = authOperations.logoutUser
 
     const submitForm = () => {
         let payload = {
             query: query,
-            sortDirection: sortDataReducer.sortDirection,
-            sortItem: sortDataReducer.sortItem,
+            sortDirection: sortDirection,
+            sortItem: sortItem,
             itemsPerPage: itemsPerPage,
             pageInput: pageInput,
         };
@@ -111,6 +113,16 @@ const RootPage = () => {
         setQuery("")
     }
 
+    const handleSortClick = (header) => {
+        const refinedeHeader = lodash.camelCase(header)
+        let tempSortDirection = ""
+
+        sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
+
+        setSortItem(refinedeHeader)
+        setSortDirection(tempSortDirection)
+    }
+
     useEffect(() => {
         submitForm()
     }, []) //eslint-disable-line
@@ -128,7 +140,7 @@ const RootPage = () => {
                 submitForm()
             }
         }
-    }, [itemsPerPage, pageInput, sortDataReducer, query]) //eslint-disable-line
+    }, [itemsPerPage, pageInput, sortItem, sortDirection, query]) //eslint-disable-line
 
     return (
         <>
@@ -152,7 +164,7 @@ const RootPage = () => {
 
                         <Row>
                             <Col xs={4}>
-                                <CardTemplate
+                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -160,7 +172,7 @@ const RootPage = () => {
                                 />
                             </Col>
                             <Col xs={4}>
-                                <CardTemplate
+                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -168,7 +180,7 @@ const RootPage = () => {
                                 />
                             </Col>
                             <Col xs={4}>
-                                <CardTemplate
+                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -192,6 +204,7 @@ const RootPage = () => {
                                         { variant: "btn btn-primary", label: "Edit", onClick: (() => handleEditRow()) },
                                         { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
                                     ]}
+                                    handleSortClick={(e) => handleSortClick(e)}
                                     pagination={{
                                         name: 'currentPage',
                                         id: 'currentPage',
@@ -202,6 +215,8 @@ const RootPage = () => {
                                         itemsPerPage: itemsPerPage,
                                         isResultLoading: isResultLoading,
                                         query: query,
+                                        sortItem: sortItem,
+                                        sortDirection: sortDirection,
                                         handleSearchSubmit: (() => handleSearchSubmit()),
                                         handleAutoComplete: ((e) => handleAutoComplete(e)),
                                         handleClearForm: (() => handleClearForm()),

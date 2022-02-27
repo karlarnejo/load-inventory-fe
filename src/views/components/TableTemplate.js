@@ -1,16 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, Col, Row, Card } from 'react-bootstrap';
 // import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
-import { sortOptions } from '../containers/LandingPage/state/actions';
 
 let TableTemplate = (props) => {
-
-    const dispatch = useDispatch();
-
-    const sortDataReducer = useSelector(state => state.landingPage.sortOptions)
 
     //Renders row data
     const RenderRow = (data) => {
@@ -44,20 +38,6 @@ let TableTemplate = (props) => {
         );
     }
 
-    const handleSortClick = (header) => {
-        const refinedeHeader = lodash.camelCase(header)
-        let tempSortDirection = ""
-
-        sortDataReducer.sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
-
-        const sortData = {
-            sortItem: refinedeHeader,
-            sortDirection: tempSortDirection
-        }
-
-        dispatch(sortOptions(sortData))
-    }
-
     const headerChecker = (header) => {
         return header !== "Actions" ? true : false
     }
@@ -65,8 +45,8 @@ let TableTemplate = (props) => {
     const sortChecker = (header) => {
 
         return (
-            headerChecker(header) && header === lodash.startCase(sortDataReducer.sortItem) ?
-                (sortDataReducer.sortDirection === "Ascending") ?
+            headerChecker(header) && header === lodash.startCase(props.pagination.sortItem) ?
+                (props.pagination.sortDirection === "Ascending") ?
                     <RiSortAsc />
                     : <RiSortDesc />
                 : null
@@ -79,7 +59,7 @@ let TableTemplate = (props) => {
             <th
                 key={i}
                 style={headerChecker(header) ? { cursor: "pointer" } : null}
-                onClick={headerChecker(header) ? () => { handleSortClick(header) } : null}>{sortChecker(header)} {header}
+                onClick={headerChecker(header) ? () => { props.handleSortClick(header) } : null}>{sortChecker(header)} {header}
             </th>
         )
     });
@@ -178,13 +158,13 @@ let TableTemplate = (props) => {
         else return null;
     }
 
-    const itemsperPageDropdown = () => {
+    const addRecordSearch = () => {
 
         if (props.tableList) {
             return (
                 <>
                     <Row>
-                        <Col className='mt-4' sm={6}>
+                        <Col className='mt-3' sm={6}>
                             <Button className='btn-success'>Add Record</Button>
                         </Col>
                         <Col sm={6}>
@@ -224,7 +204,7 @@ let TableTemplate = (props) => {
     return (
         <div>
             <Card>
-                {itemsperPageDropdown()}
+                {addRecordSearch()}
                 <hr />
                 <Table condensed="true" hover bordered responsive>
                     <thead>

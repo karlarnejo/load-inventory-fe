@@ -7,7 +7,7 @@ const defaultState = {
             "Last Name",
             "Middle Name",
             "Address",
-            "Contact No.",
+            "Contact No",
             "Gender",
             "Actions"
         ],
