@@ -11,6 +11,7 @@ import CardTemplate from '../../components/CardTemplate';
 import lodash from 'lodash'
 import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
+import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
 
 const RootPage = () => {
 
@@ -31,6 +32,7 @@ const RootPage = () => {
     const [sortDirection, setSortDirection] = useState("Ascending")
     const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
+    const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
 
     const logoutUser = authOperations.logoutUser
 
@@ -83,18 +85,6 @@ const RootPage = () => {
 
     }    
 
-    const handleEditRow = () => {
-
-    }
-
-    const handleDeleteRow = () => {
-
-    }
-
-    const handleInfoRow = () => {
-
-    }
-
     const handleNavigatePage = () => {
 
     }
@@ -117,6 +107,8 @@ const RootPage = () => {
     const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
     const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
     const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
+    const handleOpenDeleteCustomerModal = () => setShowDeleteCustomerModal(true)
+    const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
 
     useEffect(() => {
         submitForm()
@@ -196,8 +188,7 @@ const RootPage = () => {
                                     })}
                                     rowButtons={[
                                         { variant: "btn btn-info", label: "View", onClick: (() => handleOpenViewCustomerModal()) },
-                                        { variant: "btn btn-primary", label: "Edit", onClick: (() => handleEditRow()) },
-                                        { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
+                                        { variant: "btn btn-danger", label: "Delete", onClick: (() => handleOpenDeleteCustomerModal()) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
                                     handleOpenAddCustomerModal={() => handleOpenAddCustomerModal()}
@@ -240,6 +231,11 @@ const RootPage = () => {
                 handleCloseModal={() => handleCloseViewCustomerModal()}
                 showModal={showViewCustomerModal}
                 title={"View Customer"}
+            />
+            <DeleteCustomerModal
+                handleCloseModal={() => handleCloseDeleteCustomerModal()}
+                showModal={showDeleteCustomerModal}
+                title={"Delete Customer"}
             />
         </>
     );
