@@ -64,6 +64,25 @@ const RootPage = () => {
         }
     }
 
+    const handleSortClick = (header) => {
+        const refinedeHeader = lodash.camelCase(header)
+        let tempSortDirection = ""
+
+        sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
+
+        setSortItem(refinedeHeader)
+        setSortDirection(tempSortDirection)
+    }
+
+    const handleItemPerPageSelect = (event) => {
+        setItemsPerPage(parseInt(event))
+        setPageInput(1)
+    }
+
+    const handleSearchSubmit = () => {
+
+    }    
+
     const handleEditRow = () => {
 
     }
@@ -80,68 +99,24 @@ const RootPage = () => {
 
     }
 
-    const handleNext = () => {
-        setPageInput(parseInt(pageInput) + 1)
-    }
+    // sidebar
+    const handleToggleSidebar = () => collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
 
-    const handlePrev = () => {
-        setPageInput(parseInt(pageInput) - 1)
-    }
+    // pagination
+    const handleNext = () => setPageInput(parseInt(pageInput) + 1)
+    const handlePrev = () => setPageInput(parseInt(pageInput) - 1)
+    const handleLastPage = () => setPageInput(totalPages)
+    const handleFirstPage = () => setPageInput(1)
 
-    const handleLastPage = () => {
-        setPageInput(totalPages)
-    }
+    // table search
+    const handleAutoComplete = (e) => setQuery(e.target.value)
+    const handleClearForm = () => setQuery("")
 
-    const handleFirstPage = () => {
-        setPageInput(1)
-    }
-
-    const handleItemPerPageSelect = (event) => {
-        setItemsPerPage(parseInt(event))
-        setPageInput(1)
-    }
-
-    const handleToggleSidebar = () => {
-        collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
-    }
-
-    const handleSearchSubmit = () => {
-
-    }
-
-    const handleAutoComplete = (e) => {
-        setQuery(e.target.value)
-    }
-
-    const handleClearForm = () => {
-        setQuery("")
-    }
-
-    const handleSortClick = (header) => {
-        const refinedeHeader = lodash.camelCase(header)
-        let tempSortDirection = ""
-
-        sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
-
-        setSortItem(refinedeHeader)
-        setSortDirection(tempSortDirection)
-    }
-
-    const handleOpenAddCustomerModal = () => {
-        setShowAddCustomerModal(true)
-    }
-
-    const handleCloseAddCustomerModal = () => {
-        setShowAddCustomerModal(false)
-    }
-
-    const handleOpenViewCustomerModal = () => {
-        setShowViewCustomerModal(true)
-    }
-
-    const handleCloseViewCustomerModal = () => {
-        setShowViewCustomerModal(false)
-    }
+    // modal
+    const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
+    const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
+    const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
+    const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
 
     useEffect(() => {
         submitForm()
@@ -255,7 +230,7 @@ const RootPage = () => {
                     </Row>
                 </Container>
             </div>
-            
+
             <AddCustomerModal
                 handleCloseModal={() => handleCloseAddCustomerModal()}
                 showModal={showAddCustomerModal}
