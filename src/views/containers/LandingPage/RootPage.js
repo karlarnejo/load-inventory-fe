@@ -9,6 +9,8 @@ import { authOperations } from '../Login/state';
 import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
 import lodash from 'lodash'
+import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
+import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
 
 const RootPage = () => {
 
@@ -27,6 +29,8 @@ const RootPage = () => {
     const [isResultLoading, setIsResultLoading] = useState(false)
     const [sortItem, setSortItem] = useState("firstName")
     const [sortDirection, setSortDirection] = useState("Ascending")
+    const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
+    const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
 
     const logoutUser = authOperations.logoutUser
 
@@ -123,6 +127,22 @@ const RootPage = () => {
         setSortDirection(tempSortDirection)
     }
 
+    const handleOpenAddCustomerModal = () => {
+        setShowAddCustomerModal(true)
+    }
+
+    const handleCloseAddCustomerModal = () => {
+        setShowAddCustomerModal(false)
+    }
+
+    const handleOpenViewCustomerModal = () => {
+        setShowViewCustomerModal(true)
+    }
+
+    const handleCloseViewCustomerModal = () => {
+        setShowViewCustomerModal(false)
+    }
+
     useEffect(() => {
         submitForm()
     }, []) //eslint-disable-line
@@ -200,11 +220,12 @@ const RootPage = () => {
                                         return (data)
                                     })}
                                     rowButtons={[
-                                        { variant: "btn btn-info", label: "View", onClick: (() => handleInfoRow()) },
+                                        { variant: "btn btn-info", label: "View", onClick: (() => handleOpenViewCustomerModal()) },
                                         { variant: "btn btn-primary", label: "Edit", onClick: (() => handleEditRow()) },
                                         { variant: "btn btn-danger", label: "Delete", onClick: (() => handleDeleteRow()) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
+                                    handleOpenAddCustomerModal={() => handleOpenAddCustomerModal()}
                                     pagination={{
                                         name: 'currentPage',
                                         id: 'currentPage',
@@ -234,6 +255,17 @@ const RootPage = () => {
                     </Row>
                 </Container>
             </div>
+            
+            <AddCustomerModal
+                handleCloseModal={() => handleCloseAddCustomerModal()}
+                showModal={showAddCustomerModal}
+                title={"Add Customer"}
+            />
+            <ViewCustomerModal
+                handleCloseModal={() => handleCloseViewCustomerModal()}
+                showModal={showViewCustomerModal}
+                title={"View Customer"}
+            />
         </>
     );
 }
