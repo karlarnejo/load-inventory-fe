@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, Col, Row, Card } from 'react-bootstrap';
-// import EllipsisText from "react-ellipsis-text";
 import lodash from 'lodash'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
 
@@ -168,7 +167,7 @@ let TableTemplate = (props) => {
                             <Button className='btn-success' onClick={props.handleOpenAddCustomerModal}>Add Record</Button>
                         </Col>
                         <Col sm={6}>
-                            <Form className='form-inline ai-start' onSubmit={props.pagination.handleSearchSubmit()}>
+                            <Form className='form-inline ai-start' onSubmit={props.pagination.handleSearchSubmit}>
                                 <Form.Row className='ml-auto mr-4 mt-3'>
                                     <Form.Control
                                         // disabled={isResultLoading ? true : false}

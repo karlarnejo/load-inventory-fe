@@ -8,7 +8,7 @@ export const ModalTemplate = (props) => {
             show={props.showModal}
             scrollable={true}
             onHide={props.handleCloseModal}
-            size="lg"
+            size={props.type === "notif" ? "sm" : "md"}
             aria-labelledby="contained-modal-title-vcenter"
             centered>
             <Modal.Header closeButton>
@@ -17,10 +17,14 @@ export const ModalTemplate = (props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                
-
+                {props.body}
             </Modal.Body>
             <Modal.Footer>
+                {
+                    props.type === "notif" ? 
+                        <Button onClick={props.handleSuccess} variant='success' size='sm'>{"Confirm"}</Button> 
+                        : null
+                }
                 <Button onClick={props.handleCloseModal} variant='danger' size='sm'>{"Close"}</Button>
             </Modal.Footer>
         </Modal>

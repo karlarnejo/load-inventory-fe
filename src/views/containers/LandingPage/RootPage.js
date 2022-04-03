@@ -6,12 +6,13 @@ import { Container } from 'react-bootstrap';
 import Sidebar from '../../components/Sidebar'
 import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
 import { authOperations } from '../Login/state';
-import { Row, Col, Card, Form, Button } from 'react-bootstrap';
+import { Row, Col, Card, Form, FormGroup, Button } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
 import lodash from 'lodash'
 import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
+import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
 
 const RootPage = () => {
 
@@ -38,7 +39,7 @@ const RootPage = () => {
 
     const submitForm = () => {
         let payload = {
-            query: query,
+            searchQuery: query,
             sortDirection: sortDirection,
             sortItem: sortItem,
             itemsPerPage: itemsPerPage,
@@ -81,9 +82,24 @@ const RootPage = () => {
         setPageInput(1)
     }
 
-    const handleSearchSubmit = () => {
+    const handleDeleteCustomer = () => {
+        // TODO: delete customer
 
-    }    
+        //I forgot why I wrote this. Just got back from 1 week break.
+        // if(4/2 % 1 != 0) {
+        //     console.log("aaadeci")
+        // }
+        // else {
+        //     console.log("aaawhole")
+        // }
+        handleCloseDeleteCustomerModal()
+    }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+
+        submitForm()
+    }
 
     const handleNavigatePage = () => {
 
@@ -100,7 +116,10 @@ const RootPage = () => {
 
     // table search
     const handleAutoComplete = (e) => setQuery(e.target.value)
-    const handleClearForm = () => setQuery("")
+
+    const handleClearForm = () => {
+        setQuery("")
+    }
 
     // modal
     const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
@@ -127,7 +146,13 @@ const RootPage = () => {
                 submitForm()
             }
         }
-    }, [itemsPerPage, pageInput, sortItem, sortDirection, query]) //eslint-disable-line
+    }, [itemsPerPage, pageInput, sortItem, sortDirection]) //eslint-disable-line
+
+    useEffect(() => {
+        if(!query) {
+            submitForm()
+        }
+    }, [query])
 
     return (
         <>
@@ -204,7 +229,7 @@ const RootPage = () => {
                                         query: query,
                                         sortItem: sortItem,
                                         sortDirection: sortDirection,
-                                        handleSearchSubmit: (() => handleSearchSubmit()),
+                                        handleSearchSubmit: ((e) => handleSearchSubmit(e)),
                                         handleAutoComplete: ((e) => handleAutoComplete(e)),
                                         handleClearForm: (() => handleClearForm()),
                                         onChange: ((e) => handleCurrentPage(e)),
@@ -226,16 +251,30 @@ const RootPage = () => {
                 handleCloseModal={() => handleCloseAddCustomerModal()}
                 showModal={showAddCustomerModal}
                 title={"Add Customer"}
+                itemsPerLine={2}
+                body={
+                    <CustomerAddForm
+                        formNames={["First Name",
+                        "Last Name",
+                        "Middle Name",
+                        "Address",
+                        "Contact No",
+                        "Gender"]}
+                    />
+                }
             />
-            <ViewCustomerModal
+            < ViewCustomerModal
                 handleCloseModal={() => handleCloseViewCustomerModal()}
                 showModal={showViewCustomerModal}
                 title={"View Customer"}
             />
             <DeleteCustomerModal
                 handleCloseModal={() => handleCloseDeleteCustomerModal()}
+                handleSuccess={() => handleDeleteCustomer()}
                 showModal={showDeleteCustomerModal}
                 title={"Delete Customer"}
+                type={"notif"}
+                body={"Are you sure you want to delete this record?"}
             />
         </>
     );

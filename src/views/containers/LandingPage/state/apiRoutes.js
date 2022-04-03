@@ -1,1 +1,1 @@
-export const GET_CUSTOMER_LIST = "/crud/";
+export const GET_CUSTOMER_LIST = "/crud/search";
