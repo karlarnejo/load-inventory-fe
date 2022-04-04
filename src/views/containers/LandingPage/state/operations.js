@@ -14,3 +14,15 @@ export const listCustomers = (payload) => (dispatch) => {
             throw error;
         });
 }
+
+export const deleteCustomer = (payload) => () => {
+
+    return apiService.delete(path.DELETE_CUSTOMER, payload)
+        .then(response => {
+            if(response.data.data){
+                return response.data.data;
+            }
+        }).catch(error => {
+            throw error;
+        });
+}

@@ -34,8 +34,28 @@ const RootPage = () => {
     const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
     const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
-
+    const [forInlineDeletion, setForInlineDeletion] = useState("")
+    
     const logoutUser = authOperations.logoutUser
+
+    // modal
+    const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
+    const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
+    const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
+    const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
+    const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
+
+    // sidebar
+    const handleToggleSidebar = () => collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
+
+    // pagination
+    const handleNext = () => setPageInput(parseInt(pageInput) + 1)
+    const handlePrev = () => setPageInput(parseInt(pageInput) - 1)
+    const handleLastPage = () => setPageInput(totalPages)
+    const handleFirstPage = () => setPageInput(1)
+
+    // table search
+    const handleAutoComplete = (e) => setQuery(e.target.value)
 
     const submitForm = () => {
         let payload = {
@@ -92,6 +112,15 @@ const RootPage = () => {
         // else {
         //     console.log("aaawhole")
         // }
+
+        let payload = {
+            customerId: forInlineDeletion
+        }
+
+        dispatch(landingPageOperations.deleteCustomer(payload))
+            .then(() => {
+                submitForm()
+            })
         handleCloseDeleteCustomerModal()
     }
 
@@ -105,29 +134,14 @@ const RootPage = () => {
 
     }
 
-    // sidebar
-    const handleToggleSidebar = () => collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
-
-    // pagination
-    const handleNext = () => setPageInput(parseInt(pageInput) + 1)
-    const handlePrev = () => setPageInput(parseInt(pageInput) - 1)
-    const handleLastPage = () => setPageInput(totalPages)
-    const handleFirstPage = () => setPageInput(1)
-
-    // table search
-    const handleAutoComplete = (e) => setQuery(e.target.value)
-
     const handleClearForm = () => {
         setQuery("")
     }
 
-    // modal
-    const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
-    const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
-    const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
-    const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
-    const handleOpenDeleteCustomerModal = () => setShowDeleteCustomerModal(true)
-    const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
+    const handleOpenDeleteCustomerModal = (e) => {
+        setShowDeleteCustomerModal(true)
+        setForInlineDeletion(e.customerId)        
+    }
 
     useEffect(() => {
         submitForm()
@@ -213,7 +227,7 @@ const RootPage = () => {
                                     })}
                                     rowButtons={[
                                         { variant: "btn btn-info", label: "View", onClick: (() => handleOpenViewCustomerModal()) },
-                                        { variant: "btn btn-danger", label: "Delete", onClick: (() => handleOpenDeleteCustomerModal()) }
+                                        { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
                                     handleOpenAddCustomerModal={() => handleOpenAddCustomerModal()}
