@@ -1,11 +1,11 @@
 import { ROOT } from "../../../config/settings";
-import RootPage from "./RootPage";
+import LandingPage from "./LandingPage";
 
 export const routes = [
     {
-        label: "Home",
+        label: "Customer",
         path: ROOT,
-        component: RootPage,
+        component: LandingPage,
         exact: true,
         showNav: true //if true, displays the label in the mainHeader.js component
     }

@@ -1,29 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { operations as landingPageOperations } from '../LandingPage/state';
+import { operations as landingPageOperations } from './state';
 import CustomerTable from '../../components/TableTemplate';
-import { Container } from 'react-bootstrap';
-import Sidebar from '../../components/Sidebar'
-import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
 import { authOperations } from '../Login/state';
-import { Row, Col, Card, Form, FormGroup, Button } from 'react-bootstrap';
+import { Row, Col, Card, Form, FormGroup, Button, Container } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
 import lodash from 'lodash'
+import { Redirect } from "react-router-dom";
 import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
 import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
 import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
 
-const RootPage = () => {
+const CustomerPage = () => {
 
     const dispatch = useDispatch();
     const isInitialMount = useRef(true);
 
-    const tableHeaderReducer = useSelector(state => state.landingPage.table.tableHeader)
-    const tableColumnsReducer = useSelector(state => state.landingPage.table.tableColumns)
+    const tableHeaderReducer = useSelector(state => state.customerPage.table.tableHeader)
+    const tableColumnsReducer = useSelector(state => state.customerPage.table.tableColumns)
+    const collapseSidebar = useSelector(state => state.landingePage.collapseSidebar)
 
-    const [collapseSidebar, setCollapseSidebar] = useState(false)
     const [customerData, setCustomerData] = useState([])
     const [pageInput, setPageInput] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
@@ -46,9 +44,6 @@ const RootPage = () => {
     const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
     const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
     const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
-
-    // sidebar
-    const handleToggleSidebar = () => collapseSidebar ? setCollapseSidebar(false) : setCollapseSidebar(true)
 
     // pagination
     const handleNext = () => setPageInput(parseInt(pageInput) + 1)
@@ -166,52 +161,8 @@ const RootPage = () => {
 
     return (
         <>
-            <Sidebar
-                collapseSidebar={collapseSidebar}
-                handleToggleSidebar={() => handleToggleSidebar()}
-                sidebarLogo={"LOGO"}
-                sidebarItems={[
-                    { icon: <RiMessage3Line className="sidebar-icon" />, name: "Dashboard" },
-                    { icon: <RiChat4Fill className="sidebar-icon" />, name: "Chat" },
-                    { icon: <RiTeamFill className="sidebar-icon" />, name: "Teams" },
-                    { icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks" },
-                    { icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics" },
-                    { icon: <RiLogoutBoxFill className="sidebar-icon" />, name: "Logout", onclick: (() => dispatch(logoutUser())) }
-                ]}
-            />
-
             <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
                 <Container fluid>
-                    <Card>
-
-                        <Row>
-                            <Col xs={4}>
-                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
-                                    cardTitle='Smart'
-                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                    cardButtonName='Go'
-                                // onClick
-                                />
-                            </Col>
-                            <Col xs={4}>
-                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
-                                    cardTitle='Smart'
-                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                    cardButtonName='Go'
-                                // onClick
-                                />
-                            </Col>
-                            <Col xs={4}>
-                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
-                                    cardTitle='Smart'
-                                    cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
-                                    cardButtonName='Go'
-                                // onClick
-                                />
-                            </Col>
-                        </Row>
-                    </Card>
-
                     <Row>
                         <Col xs={12}>
                             <Card>
@@ -264,12 +215,12 @@ const RootPage = () => {
                 body={
                     <CustomerAddForm
                         formRows={[
-                            {name: "First Name", type: "text"},
-                            {name: "Last Name", type: "text"},
-                            {name: "Middle Name", type: "text"},
-                            {name: "Address", type: "text"},
-                            {name: "Contact No", type: "text"},
-                            {name: "Gender", type: "select", action: handleGenderDropdown}
+                            { name: "First Name", type: "text" },
+                            { name: "Last Name", type: "text" },
+                            { name: "Middle Name", type: "text" },
+                            { name: "Address", type: "text" },
+                            { name: "Contact No", type: "text" },
+                            { name: "Gender", type: "select", action: handleGenderDropdown }
                         ]}
                     />
                 }
@@ -281,12 +232,12 @@ const RootPage = () => {
                 body={
                     <CustomerEditForm
                         formRows={[
-                            {name: "First Name", type: "text"},
-                            {name: "Last Name", type: "text"},
-                            {name: "Middle Name", type: "text"},
-                            {name: "Address", type: "text"},
-                            {name: "Contact No", type: "text"},
-                            {name: "Gender", type: "select", action: handleGenderDropdown}
+                            { name: "First Name", type: "text" },
+                            { name: "Last Name", type: "text" },
+                            { name: "Middle Name", type: "text" },
+                            { name: "Address", type: "text" },
+                            { name: "Contact No", type: "text" },
+                            { name: "Gender", type: "select", action: handleGenderDropdown }
                         ]}
                     />
                 }
@@ -303,4 +254,4 @@ const RootPage = () => {
     );
 }
 
-export default RootPage;
+export default CustomerPage;

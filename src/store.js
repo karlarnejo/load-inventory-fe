@@ -10,7 +10,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 //Modules imports
 import Login from './views/containers/Login/state';
 import Error404 from './views/containers/Errors/404';
-import LandingPage from './views/containers/LandingPage/state';
+import CustomerPage from './views/containers/Customers/state';
+import LandingPage from './views/containers/Landing/state';
 
 //Store methods
 const loadState = () => {
@@ -30,12 +31,14 @@ const saveState = (state) => {
 //Module Reducers
 const rootReducer = combineReducers({
     auth: Login.reducer,
-    landingPage: LandingPage.reducer
+    customerPage: CustomerPage.reducer,
+    landingePage: LandingPage.reducer
 });
 
 //Module Routes
 export const rootRoutes = [
     ...Login.routes,
+    ...CustomerPage.routes,
     ...LandingPage.routes,
     {component: Error404}
 ]

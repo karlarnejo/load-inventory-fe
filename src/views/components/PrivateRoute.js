@@ -1,19 +1,42 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Route, useHistory, Redirect } from 'react-router-dom';
 // import { authOperations } from '../containers/Login/state';
 // import MainHeader from './MainHeader';
+import Sidebar from './Sidebar'
+import { RiMessage3Line, RiChat4Fill, RiTeamFill, RiTaskFill, RiPieChart2Fill, RiLogoutBoxFill } from 'react-icons/ri';
 import { LOGIN_ROUTE } from '../containers/Login/routes';
+import { authOperations } from '../containers/Login/state';
+import { collapseSidebar as collapseSidebarFnc } from '../containers/Landing/state/actions';
+import { ROOT, CUSTOMER } from "../../config/settings";
 
 const PrivateRoute = (props) => {
-    
+
+    const dispatch = useDispatch();
+    const history = useHistory()
+
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-    // const user = useSelector(state => state.auth.account)
-    // const logoutUser = authOperations.logoutUser
+    const collapseSidebar = useSelector(state => state.landingePage.collapseSidebar)
+
+    const logoutUser = authOperations.logoutUser
+    const handleToggleSidebar = () => collapseSidebar ? dispatch(collapseSidebarFnc(false)) : dispatch(collapseSidebarFnc(true))
 
     return isAuthenticated ?
         <div>
-            {/* <MainHeader {...props} isAuthenticated={isAuthenticated} logoutUser={logoutUser}/> */}
+            <Sidebar
+                collapseSidebar={collapseSidebar}
+                handleToggleSidebar={() => handleToggleSidebar()}
+                sidebarLogo={"LOGO"}
+                sidebarItems={[
+                    { icon: <RiMessage3Line className="sidebar-icon" />, name: "Dashboard", onclick: (() => history.push(ROOT)) },
+                    { icon: <RiChat4Fill className="sidebar-icon" />, name: "Chat" },
+                    { icon: <RiTeamFill className="sidebar-icon" />, name: "Customers", onclick: (() => history.push(CUSTOMER)) },
+                    { icon: <RiTaskFill className="sidebar-icon" />, name: "Tasks" },
+                    { icon: <RiPieChart2Fill className="sidebar-icon" />, name: "Analytics" },
+                    { icon: <RiLogoutBoxFill className="sidebar-icon" />, name: "Logout", onclick: (() => dispatch(logoutUser())) }
+                ]}
+            />
+
             <Route path={props.path} component={props.component} />
         </div>
         : (
