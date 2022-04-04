@@ -13,6 +13,7 @@ import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplat
 import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
 import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
+import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
 
 const RootPage = () => {
 
@@ -35,7 +36,8 @@ const RootPage = () => {
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
     const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
     const [forInlineDeletion, setForInlineDeletion] = useState("")
-    
+    const [gender, setGender] = useState("M")
+
     const logoutUser = authOperations.logoutUser
 
     // modal
@@ -103,16 +105,6 @@ const RootPage = () => {
     }
 
     const handleDeleteCustomer = () => {
-        // TODO: delete customer
-
-        //I forgot why I wrote this. Just got back from 1 week break.
-        // if(4/2 % 1 != 0) {
-        //     console.log("aaadeci")
-        // }
-        // else {
-        //     console.log("aaawhole")
-        // }
-
         let payload = {
             customerId: forInlineDeletion
         }
@@ -134,13 +126,17 @@ const RootPage = () => {
 
     }
 
+    const handleGenderDropdown = () => {
+
+    }
+
     const handleClearForm = () => {
         setQuery("")
     }
 
     const handleOpenDeleteCustomerModal = (e) => {
         setShowDeleteCustomerModal(true)
-        setForInlineDeletion(e.customerId)        
+        setForInlineDeletion(e.customerId)
     }
 
     useEffect(() => {
@@ -163,7 +159,7 @@ const RootPage = () => {
     }, [itemsPerPage, pageInput, sortItem, sortDirection]) //eslint-disable-line
 
     useEffect(() => {
-        if(!query) {
+        if (!query) {
             submitForm()
         }
     }, [query])
@@ -190,7 +186,7 @@ const RootPage = () => {
 
                         <Row>
                             <Col xs={4}>
-                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
+                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -198,7 +194,7 @@ const RootPage = () => {
                                 />
                             </Col>
                             <Col xs={4}>
-                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
+                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -206,7 +202,7 @@ const RootPage = () => {
                                 />
                             </Col>
                             <Col xs={4}>
-                                <CardTemplate className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
+                                <CardTemplate className={"open-width mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}
                                     cardTitle='Smart'
                                     cardDesc='Lorem ipsum dolor sit amet. Eum dolore enim sit enim temporibus id fugit consectetur ad repellat libero sit illo quidem.'
                                     cardButtonName='Go'
@@ -265,15 +261,16 @@ const RootPage = () => {
                 handleCloseModal={() => handleCloseAddCustomerModal()}
                 showModal={showAddCustomerModal}
                 title={"Add Customer"}
-                itemsPerLine={2}
                 body={
                     <CustomerAddForm
-                        formNames={["First Name",
-                        "Last Name",
-                        "Middle Name",
-                        "Address",
-                        "Contact No",
-                        "Gender"]}
+                        formRows={[
+                            {name: "First Name", type: "text"},
+                            {name: "Last Name", type: "text"},
+                            {name: "Middle Name", type: "text"},
+                            {name: "Address", type: "text"},
+                            {name: "Contact No", type: "text"},
+                            {name: "Gender", type: "select", action: handleGenderDropdown}
+                        ]}
                     />
                 }
             />
@@ -281,6 +278,18 @@ const RootPage = () => {
                 handleCloseModal={() => handleCloseViewCustomerModal()}
                 showModal={showViewCustomerModal}
                 title={"View Customer"}
+                body={
+                    <CustomerEditForm
+                        formRows={[
+                            {name: "First Name", type: "text"},
+                            {name: "Last Name", type: "text"},
+                            {name: "Middle Name", type: "text"},
+                            {name: "Address", type: "text"},
+                            {name: "Contact No", type: "text"},
+                            {name: "Gender", type: "select", action: handleGenderDropdown}
+                        ]}
+                    />
+                }
             />
             <DeleteCustomerModal
                 handleCloseModal={() => handleCloseDeleteCustomerModal()}

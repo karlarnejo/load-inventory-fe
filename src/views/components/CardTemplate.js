@@ -3,7 +3,7 @@ import { Card, Button } from 'react-bootstrap';
 
 let CardTemplate = (props) => {
     return (
-        <Card style={{ alignContent:'center', width: '27rem' }}>
+        <Card style={{ alignContent:'center' }}>
             {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
             <Card.Body>
                 <Card.Title>{props.cardTitle}</Card.Title>

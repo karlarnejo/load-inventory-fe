@@ -1,99 +1,60 @@
 import React from 'react';
-import { Row, Col, Card, Form, FormGroup, Button } from 'react-bootstrap';
+import {Form, Container, Dropdown } from 'react-bootstrap';
 
 export const FormControlTemplate = (props) => {
-
-    // const itemsPerLine = 2
-    // const itemsPerLineDivide2 = props.formNames / itemsPerLine //3
-
-    // const checkCount = () => {
-    //     let min = itemsPerLine - itemsPerLine
-    //     let max = itemsPerLine
-
-
-    //     for (let count = 0; count < itemsPerLineDivide2; count++) {
-    //         return (
-    //             <Row>
-    //                 {
-    //                     props.formNames / 2 % 1 === 0 ?
-    //                         formNames.map((data, index) => {
-    //                             if (index > min && index < max) {
-    //                                 <Col sm={6}>
-    //                                     <Form.Row>
-    //                                         <FormGroup>
-    //                                             <Form.Label>{data}</Form.Label>
-    //                                             <Form.Control
-    //                                                 type="text"
-    //                                                 value={""}
-    //                                                 size='sm'
-    //                                                 placeholder={data}
-    //                                             />
-    //                                         </FormGroup>
-    //                                     </Form.Row>
-    //                                 </Col>
-    //                             }
-
-    //                             min = min + itemsPerLine
-    //                             max = max + itemsPerLine
-    //                         })
-    //                         : null // if decimal
-    //                 }
-    //             </Row>
-    //         )
-    //     }
-
-
-
-
-    //     props.formNames / 2 % 1 === 0 ?
-    //         formNames.map((data, index) => {
-    //             if (index > min && index < max) {
-    //                 <Row>
-
-    //                 </Row>
-    //             }
-
-    //             min = min + itemsPerLine
-    //             max = max + itemsPerLine
-    //         })
-    //         : null // if decimal
-    // }
-
-    //for loop 3 times
-    //create row
-    //loop to create col
-
     return (
-        <Form>
-            {/* {props.formNames % 1 != 0 ? true} */}
-            <Row>
-                <Col sm={6}>
-                    <Form.Row>
-                        <FormGroup>
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={""}
-                                size='sm'
-                                placeholder='FirstName'
-                            />
-                        </FormGroup>
-                    </Form.Row>
-                </Col>
-                <Col sm={6}>
-                    <Form.Row>
-                        <FormGroup>
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={""}
-                                size='sm'
-                                placeholder='LastName'
-                            />
-                        </FormGroup>
-                    </Form.Row>
-                </Col>
-            </Row>
-        </Form>
+        <Container>
+            <Form>
+                {props.formRows.map((formRow) => {
+
+                    switch (formRow.type) {
+                        case "file": {
+                            // TODO
+
+                            return null
+                        }
+                        case "radio": {
+                            //TODO
+
+                            return null
+                        }
+                        case "checkbox": {
+                            //TODO
+
+                            return null
+                        }
+                        case "select": {
+                            return (
+                                <Form.Group className='m-2'>
+                                    <Form.Label>{formRow.name}</Form.Label>
+                                    <Dropdown className=' mt-1'>
+                                        <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='dropdown-size btn-dropdown' variant='light' placeholder='M' size='sm'>
+                                            {"M"}
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onSelect={formRow.action} eventKey='M'>M</Dropdown.Item>
+                                            <Dropdown.Item onSelect={formRow.action} eventKey='F'>F</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Form.Group>
+                            )
+                        }
+                        default: {
+                            return (
+                                <Form.Group className='m-2'>
+                                    <Form.Label>{formRow.name}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={""}
+                                        size='sm'
+                                        placeholder={formRow.name}
+                                    />
+                                </Form.Group>
+                            )
+                        }
+                    }
+                })}
+            </Form>
+        </Container>
     )
 }
