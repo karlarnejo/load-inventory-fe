@@ -34,15 +34,42 @@ const CustomerPage = () => {
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
     const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
     const [forInlineDeletion, setForInlineDeletion] = useState("")
-    const [gender, setGender] = useState("M")
+    const [editDisabled, setEditDisabled] = useState(true)
 
-    const logoutUser = authOperations.logoutUser
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [middleName, setMiddleName] = useState("")
+    const [address, setAddress] = useState("")
+    const [contactNo, setContactNo] = useState("")
+    const [gender, setGender] = useState("")
+    const [customerNumber, setCustomerNumber] = useState("")
 
     // modal
+    const handleEditDisabled = () => setEditDisabled(!editDisabled)
     const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
     const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
-    const handleOpenViewCustomerModal = () => setShowViewCustomerModal(true)
-    const handleCloseViewCustomerModal = () => setShowViewCustomerModal(false)
+    const handleOpenViewCustomerModal = (e) => {
+        setShowViewCustomerModal(true)
+
+        setFirstName(e.firstName)
+        setLastName(e.lastName)
+        setMiddleName(e.middleName)
+        setAddress(e.address)
+        setContactNo(e.contactNo)
+        setGender(e.gender)
+        setCustomerNumber(e.customerId)
+    }
+    const handleCloseViewCustomerModal = () => {
+        setShowViewCustomerModal(false)
+    
+        setFirstName("")
+        setLastName("")
+        setMiddleName("")
+        setAddress("")
+        setContactNo("")
+        setGender("")
+        setCustomerNumber("")
+    }
     const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
 
     // pagination
@@ -173,7 +200,7 @@ const CustomerPage = () => {
                                         return (data)
                                     })}
                                     rowButtons={[
-                                        { variant: "btn btn-info", label: "View", onClick: (() => handleOpenViewCustomerModal()) },
+                                        { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewCustomerModal(e)) },
                                         { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
@@ -229,15 +256,18 @@ const CustomerPage = () => {
                 handleCloseModal={() => handleCloseViewCustomerModal()}
                 showModal={showViewCustomerModal}
                 title={"View Customer"}
+                handleDisabled={() => handleEditDisabled()}
+                disabled={editDisabled}
+                type={"view"}
                 body={
                     <CustomerEditForm
                         formRows={[
-                            { name: "First Name", type: "text" },
-                            { name: "Last Name", type: "text" },
-                            { name: "Middle Name", type: "text" },
-                            { name: "Address", type: "text" },
-                            { name: "Contact No", type: "text" },
-                            { name: "Gender", type: "select", action: handleGenderDropdown }
+                            { name: "First Name", type: "text", disabled: editDisabled, data: firstName, action: ((e) => setFirstName(e.target.value)) },
+                            { name: "Last Name", type: "text", disabled: editDisabled, data: lastName, action: ((e) => setLastName(e.target.value)) },
+                            { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
+                            { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
+                            { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
+                            { name: "Gender", type: "select", disabled: editDisabled, data:gender, action: ((e) => handleGenderDropdown(e.target.value)) }
                         ]}
                     />
                 }
@@ -247,7 +277,7 @@ const CustomerPage = () => {
                 handleSuccess={() => handleDeleteCustomer()}
                 showModal={showDeleteCustomerModal}
                 title={"Delete Customer"}
-                type={"notif"}
+                type={"notification"}
                 body={"Are you sure you want to delete this record?"}
             />
         </>

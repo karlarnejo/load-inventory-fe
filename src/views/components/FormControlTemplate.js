@@ -3,7 +3,6 @@ import {Form, Container, Dropdown } from 'react-bootstrap';
 
 export const FormControlTemplate = (props) => {
     return (
-        <Container>
             <Form>
                 {props.formRows.map((formRow) => {
 
@@ -29,7 +28,7 @@ export const FormControlTemplate = (props) => {
                                     <Form.Label>{formRow.name}</Form.Label>
                                     <Dropdown className=' mt-1'>
                                         <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='dropdown-size btn-dropdown' variant='light' placeholder='M' size='sm'>
-                                            {"M"}
+                                            {formRow.data}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
                                             <Dropdown.Item onSelect={formRow.action} eventKey='M'>M</Dropdown.Item>
@@ -45,9 +44,11 @@ export const FormControlTemplate = (props) => {
                                     <Form.Label>{formRow.name}</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={""}
+                                        value={formRow.data}
                                         size='sm'
+                                        disabled={formRow.disabled}
                                         placeholder={formRow.name}
+                                        onChange={formRow.action}
                                     />
                                 </Form.Group>
                             )
@@ -55,6 +56,5 @@ export const FormControlTemplate = (props) => {
                     }
                 })}
             </Form>
-        </Container>
     )
 }
