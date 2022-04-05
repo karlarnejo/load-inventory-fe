@@ -35,6 +35,7 @@ const CustomerPage = () => {
     const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
     const [forInlineDeletion, setForInlineDeletion] = useState("")
     const [editDisabled, setEditDisabled] = useState(true)
+    const [isClickedClear, setIsClickedClear] = useState(false)
 
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -44,10 +45,24 @@ const CustomerPage = () => {
     const [gender, setGender] = useState("")
     const [customerNumber, setCustomerNumber] = useState("")
 
+    const initialStateForm = () => {
+        setFirstName("")
+        setLastName("")
+        setMiddleName("")
+        setAddress("")
+        setContactNo("")
+        setGender("")
+        setCustomerNumber("")
+    }
+
     // modal
     const handleEditDisabled = () => setEditDisabled(!editDisabled)
     const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
-    const handleCloseAddCustomerModal = () => setShowAddCustomerModal(false)
+    const handleCloseAddCustomerModal = () => {
+        setShowAddCustomerModal(false)
+
+        initialStateForm()
+    }
     const handleOpenViewCustomerModal = (e) => {
         setShowViewCustomerModal(true)
 
@@ -61,14 +76,8 @@ const CustomerPage = () => {
     }
     const handleCloseViewCustomerModal = () => {
         setShowViewCustomerModal(false)
-    
-        setFirstName("")
-        setLastName("")
-        setMiddleName("")
-        setAddress("")
-        setContactNo("")
-        setGender("")
-        setCustomerNumber("")
+
+        initialStateForm()
     }
     const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
 
@@ -153,6 +162,7 @@ const CustomerPage = () => {
     }
 
     const handleClearForm = () => {
+        setIsClickedClear(true)
         setQuery("")
     }
 
@@ -178,13 +188,17 @@ const CustomerPage = () => {
                 submitForm()
             }
         }
+
     }, [itemsPerPage, pageInput, sortItem, sortDirection]) //eslint-disable-line
 
     useEffect(() => {
-        if (!query) {
+
+        if (isClickedClear) {
             submitForm()
         }
-    }, [query])
+
+        setIsClickedClear(false)
+    }, [isClickedClear])
 
     return (
         <>
@@ -219,7 +233,7 @@ const CustomerPage = () => {
                                         sortDirection: sortDirection,
                                         handleSearchSubmit: ((e) => handleSearchSubmit(e)),
                                         handleAutoComplete: ((e) => handleAutoComplete(e)),
-                                        handleClearForm: (() => handleClearForm()),
+                                        handleClearForm: (handleClearForm),
                                         onChange: ((e) => handleCurrentPage(e)),
                                         onKeyDown: (() => handleNavigatePage()),
                                         onClickNext: (() => handleNext()),
@@ -242,12 +256,12 @@ const CustomerPage = () => {
                 body={
                     <CustomerAddForm
                         formRows={[
-                            { name: "First Name", type: "text" },
-                            { name: "Last Name", type: "text" },
-                            { name: "Middle Name", type: "text" },
-                            { name: "Address", type: "text" },
-                            { name: "Contact No", type: "text" },
-                            { name: "Gender", type: "select", action: handleGenderDropdown }
+                            { name: "First Name", type: "text", data: firstName, action: ((e) => setFirstName(e.target.value)) },
+                            { name: "Last Name", type: "text", data: lastName, action: ((e) => setLastName(e.target.value)) },
+                            { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
+                            { name: "Address", type: "text", data: address, action: ((e) => setAddress(e.target.value)) },
+                            { name: "Contact No", type: "text", data: contactNo, action: ((e) => setContactNo(e.target.value)) },
+                            { name: "Gender", type: "select", data: gender, action: ((e) => handleGenderDropdown(e.target.value)) }
                         ]}
                     />
                 }
@@ -267,7 +281,7 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data:gender, action: ((e) => handleGenderDropdown(e.target.value)) }
+                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, action: ((e) => handleGenderDropdown(e.target.value)) }
                         ]}
                     />
                 }
