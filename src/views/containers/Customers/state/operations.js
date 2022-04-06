@@ -19,7 +19,21 @@ export const deleteCustomer = (payload) => () => {
 
     return apiService.delete(path.DELETE_CUSTOMER, payload)
         .then(response => {
+            //TODO: find something for then() or remove it.
             if(response.data.data){
+                return response.data.data;
+            }
+        }).catch(error => {
+            throw error;
+        });
+}
+
+export const saveCustomer = (payload) => () => {
+    
+    return apiService.post(path.SAVE_CUSTOMER, payload)
+        .then(response => {
+            //TODO: find something for then() or remove it.
+            if(response.data.data) {
                 return response.data.data;
             }
         }).catch(error => {

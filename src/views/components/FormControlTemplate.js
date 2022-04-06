@@ -27,7 +27,7 @@ export const FormControlTemplate = (props) => {
                                 <Form.Group className='m-2'>
                                     <Form.Label>{formRow.name}</Form.Label>
                                     <Dropdown className=' mt-1'>
-                                        <Dropdown.Toggle disabled={props.disabledLoadEmpty} className='dropdown-size btn-dropdown' variant='light' placeholder='M' size='sm'>
+                                        <Dropdown.Toggle disabled={formRow.disabled} className='dropdown-size btn-dropdown' variant='light' placeholder='M' size='sm'>
                                             {formRow.data}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>

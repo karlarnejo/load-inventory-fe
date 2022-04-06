@@ -157,8 +157,28 @@ const CustomerPage = () => {
 
     }
 
-    const handleGenderDropdown = () => {
+    const handleGenderDropdown = (e) => {
+        setGender(e)
+    }
 
+    const handleSaveCustomer = () => {
+
+        let payload = {
+            customerId: customerNumber,
+            firstName: firstName,
+            lastName: lastName,
+            middleName: middleName,
+            gender: gender,
+            contactNo: contactNo,
+            address: address
+        }
+
+        dispatch(landingPageOperations.saveCustomer(payload))
+        setShowAddCustomerModal(false)
+    }
+
+    const handleEditCustomer = () => {
+        setShowViewCustomerModal(false)
     }
 
     const handleClearForm = () => {
@@ -252,6 +272,7 @@ const CustomerPage = () => {
             <AddCustomerModal
                 handleCloseModal={() => handleCloseAddCustomerModal()}
                 showModal={showAddCustomerModal}
+                handleSuccess={() => handleSaveCustomer()}
                 title={"Add Customer"}
                 body={
                     <CustomerAddForm
@@ -261,7 +282,7 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", data: address, action: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", data: gender, action: ((e) => handleGenderDropdown(e.target.value)) }
+                            { name: "Gender", type: "select", data: gender, action: (handleGenderDropdown) }
                         ]}
                     />
                 }
@@ -272,6 +293,7 @@ const CustomerPage = () => {
                 title={"View Customer"}
                 handleDisabled={() => handleEditDisabled()}
                 disabled={editDisabled}
+                handleSuccess={() => handleEditCustomer()}
                 type={"view"}
                 body={
                     <CustomerEditForm
@@ -281,7 +303,7 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, action: ((e) => handleGenderDropdown(e.target.value)) }
+                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, action: (handleGenderDropdown) }
                         ]}
                     />
                 }
