@@ -78,6 +78,7 @@ const CustomerPage = () => {
         setShowViewCustomerModal(false)
 
         initialStateForm()
+        setEditDisabled(true)
     }
     const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
 
@@ -174,11 +175,36 @@ const CustomerPage = () => {
         }
 
         dispatch(landingPageOperations.saveCustomer(payload))
+            .then(() => {
+                submitForm()
+            })
+            .catch((e) => {
+                console.log("Error: ", e)
+            })
         setShowAddCustomerModal(false)
     }
 
     const handleEditCustomer = () => {
+
+        let payload = {
+            customerId: customerNumber,
+            firstName: firstName,
+            lastName: lastName,
+            middleName: middleName,
+            gender: gender,
+            contactNo: contactNo,
+            address: address
+        }
+
+        dispatch(landingPageOperations.updateCustomer(payload))
+            .then(() => {
+                submitForm()
+            })
+            .catch((e) => {
+                console.log("Error: ", e)
+            })
         setShowViewCustomerModal(false)
+        setEditDisabled(true)
     }
 
     const handleClearForm = () => {
