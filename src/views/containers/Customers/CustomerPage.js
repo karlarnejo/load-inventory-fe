@@ -177,6 +177,7 @@ const CustomerPage = () => {
         dispatch(landingPageOperations.saveCustomer(payload))
             .then(() => {
                 submitForm()
+                initialStateForm()
             })
             .catch((e) => {
                 console.log("Error: ", e)
@@ -199,6 +200,7 @@ const CustomerPage = () => {
         dispatch(landingPageOperations.updateCustomer(payload))
             .then(() => {
                 submitForm()
+                initialStateForm()
             })
             .catch((e) => {
                 console.log("Error: ", e)
