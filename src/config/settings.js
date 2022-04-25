@@ -12,3 +12,5 @@ export const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
 export const ROOT = '/';
 //Customer route
 export const CUSTOMER = "/customer"
+//Orders route
+export const ORDER = "/order"

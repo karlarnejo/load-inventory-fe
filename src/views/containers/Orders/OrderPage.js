@@ -10,7 +10,7 @@ import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemp
 import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
 import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
 
-const CustomerPage = () => {
+const OrderPage = () => {
 
     const dispatch = useDispatch();
     const isInitialMount = useRef(true);
@@ -345,4 +345,4 @@ const CustomerPage = () => {
     );
 }
 
-export default CustomerPage;
+export default OrderPage;

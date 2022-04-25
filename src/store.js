@@ -12,6 +12,7 @@ import Login from './views/containers/Login/state';
 import Error404 from './views/containers/Errors/404';
 import CustomerPage from './views/containers/Customers/state';
 import LandingPage from './views/containers/Landing/state';
+import OrderPage from './views/containers/Orders/state';
 
 //Store methods
 const loadState = () => {
@@ -32,7 +33,8 @@ const saveState = (state) => {
 const rootReducer = combineReducers({
     auth: Login.reducer,
     customerPage: CustomerPage.reducer,
-    landingePage: LandingPage.reducer
+    landingePage: LandingPage.reducer,
+    orderPage: OrderPage.reducer
 });
 
 //Module Routes
@@ -40,6 +42,7 @@ export const rootRoutes = [
     ...Login.routes,
     ...CustomerPage.routes,
     ...LandingPage.routes,
+    ...OrderPage.routes,
     {component: Error404}
 ]
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Row, Col, Card, Container } from 'react-bootstrap';
 import CardTemplate from '../../components/CardTemplate';
 
