@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { operations as landingPageOperations } from './state';
+import { operations as customerPageOperations } from './state';
 import CustomerTable from '../../components/TableTemplate';
 import { Row, Col, Card, Container } from 'react-bootstrap';
 import lodash from 'lodash'
@@ -97,7 +97,7 @@ const CustomerPage = () => {
             pageInput: pageInput,
         };
 
-        dispatch(landingPageOperations.listCustomers(payload))
+        dispatch(customerPageOperations.listCustomers(payload))
             .then((response) => {
                 setCustomerData(response.data)
                 setTotalPages(response.totalPages)
@@ -138,7 +138,7 @@ const CustomerPage = () => {
             customerId: forInlineDeletion
         }
 
-        dispatch(landingPageOperations.deleteCustomer(payload))
+        dispatch(customerPageOperations.deleteCustomer(payload))
             .then(() => {
                 submitForm()
             })
@@ -171,7 +171,7 @@ const CustomerPage = () => {
             address: address
         }
 
-        dispatch(landingPageOperations.saveCustomer(payload))
+        dispatch(customerPageOperations.saveCustomer(payload))
             .then(() => {
                 submitForm()
                 initialStateForm()
@@ -194,7 +194,7 @@ const CustomerPage = () => {
             address: address
         }
 
-        dispatch(landingPageOperations.updateCustomer(payload))
+        dispatch(customerPageOperations.updateCustomer(payload))
             .then(() => {
                 submitForm()
                 initialStateForm()

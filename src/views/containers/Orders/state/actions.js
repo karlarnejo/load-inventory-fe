@@ -1,7 +1,7 @@
 import * as types from './types';
 
-export const listCustomers = (value) => ({
-    type: types.GET_CUSTOMER_LIST,
+export const listOrders = (value) => ({
+    type: types.GET_ORDER_LIST,
     payload: value
 })
 

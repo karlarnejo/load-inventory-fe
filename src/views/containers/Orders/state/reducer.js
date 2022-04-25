@@ -6,9 +6,11 @@ const defaultState = {
             "First Name",
             "Last Name",
             "Middle Name",
-            "Address",
-            "Contact No",
-            "Gender",
+            "Order Code",
+            "Promo Name",
+            "Price",
+            "Provider Name",
+            "Status",
             "Actions"
         ],
 
@@ -16,15 +18,17 @@ const defaultState = {
             "firstName",
             "lastName",
             "middleName",
-            "address",
-            "contactNo",
-            "gender"
+            "orderCode",
+            "promoName",
+            "price",
+            "providerName",
+            "status"
         ],
     },
 
-    customerList: [],
+    orderList: [],
     sortOptions: {
-        sortItem: "firstName",
+        sortItem: "customer.firstName",
         sortDirection: "Ascending"
     }
 }
@@ -32,10 +36,10 @@ const defaultState = {
 export default function reducer (state=defaultState, action){
     switch(action.type){
         //add cases here in the future if needed.
-        case types.GET_CUSTOMER_LIST:
+        case types.GET_ORDER_LIST:
             return {
                 ...state, 
-                customerList: action.payload
+                orderList: action.payload
             };
         case types.SORT_OPTIONS:
             return {

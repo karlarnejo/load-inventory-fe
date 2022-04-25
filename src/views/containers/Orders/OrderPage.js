@@ -1,35 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { operations as landingPageOperations } from './state';
-import CustomerTable from '../../components/TableTemplate';
+import { operations as orderPageOperations } from './state';
+import OrderTable from '../../components/TableTemplate';
 import { Row, Col, Card, Container } from 'react-bootstrap';
 import lodash from 'lodash'
-import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
-import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
-import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
-import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
-import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
+import { ModalTemplate as AddOrderModal } from '../../components/ModalTemplate'
+import { ModalTemplate as ViewOrderModal } from '../../components/ModalTemplate'
+import { ModalTemplate as DeleteOrderModal } from '../../components/ModalTemplate'
+import { FormControlTemplate as OrderAddForm } from '../../components/FormControlTemplate'
+import { FormControlTemplate as OrderEditForm } from '../../components/FormControlTemplate'
 
 const OrderPage = () => {
 
     const dispatch = useDispatch();
     const isInitialMount = useRef(true);
 
-    const tableHeaderReducer = useSelector(state => state.customerPage.table.tableHeader)
-    const tableColumnsReducer = useSelector(state => state.customerPage.table.tableColumns)
+    const tableHeaderReducer = useSelector(state => state.orderPage.table.tableHeader)
+    const tableColumnsReducer = useSelector(state => state.orderPage.table.tableColumns)
     const collapseSidebar = useSelector(state => state.landingePage.collapseSidebar)
 
-    const [customerData, setCustomerData] = useState([])
+    const [orderData, setOrderData] = useState([])
     const [pageInput, setPageInput] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [query, setQuery] = useState("")
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [isResultLoading, setIsResultLoading] = useState(false)
-    const [sortItem, setSortItem] = useState("firstName")
+    const [sortItem, setSortItem] = useState("customer.firstName")
     const [sortDirection, setSortDirection] = useState("Ascending")
-    const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
-    const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
-    const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
+    const [showAddOrderModal, setShowAddOrderModal] = useState(false)
+    const [showViewOrderModal, setShowViewOrderModal] = useState(false)
+    const [showDeleteOrderModal, setShowDeleteOrderModal] = useState(false)
     const [forInlineDeletion, setForInlineDeletion] = useState("")
     const [editDisabled, setEditDisabled] = useState(true)
     const [isClickedClear, setIsClickedClear] = useState(false)
@@ -37,47 +37,53 @@ const OrderPage = () => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [middleName, setMiddleName] = useState("")
-    const [address, setAddress] = useState("")
-    const [contactNo, setContactNo] = useState("")
-    const [gender, setGender] = useState("")
-    const [customerNumber, setCustomerNumber] = useState("")
+    const [orderCode, setOrderCode] = useState("")
+    const [createdAt, setCreatedAt] = useState("")
+    const [promoName, setPromoName] = useState("")
+    const [price, setPrice] = useState("")
+    const [providerName, setProviderName] = useState("")
+    const [orderNumber, setOrderNumber] = useState("")
 
     const initialStateForm = () => {
         setFirstName("")
         setLastName("")
         setMiddleName("")
-        setAddress("")
-        setContactNo("")
-        setGender("")
-        setCustomerNumber("")
+        setOrderCode("")
+        setCreatedAt("")
+        setPromoName("")
+        setPrice("")
+        setProviderName("")
+        setOrderNumber("")
     }
 
     // modal
     const handleEditDisabled = () => setEditDisabled(!editDisabled)
-    const handleOpenAddCustomerModal = () => setShowAddCustomerModal(true)
-    const handleCloseAddCustomerModal = () => {
-        setShowAddCustomerModal(false)
+    const handleOpenAddOrderModal = () => setShowAddOrderModal(true)
+    const handleCloseAddOrderModal = () => {
+        setShowAddOrderModal(false)
 
         initialStateForm()
     }
-    const handleOpenViewCustomerModal = (e) => {
-        setShowViewCustomerModal(true)
+    const handleOpenViewOrderModal = (e) => {
+        setShowViewOrderModal(true)
 
         setFirstName(e.firstName)
         setLastName(e.lastName)
         setMiddleName(e.middleName)
-        setAddress(e.address)
-        setContactNo(e.contactNo)
-        setGender(e.gender)
-        setCustomerNumber(e.customerId)
+        setOrderCode(e.orderCode)
+        setCreatedAt(e.createdAt)
+        setPromoName(e.promoName)
+        setPrice(e.price)
+        setProviderName(e.providerName)
+        setOrderNumber(e.orderNumber)
     }
-    const handleCloseViewCustomerModal = () => {
-        setShowViewCustomerModal(false)
+    const handleCloseViewOrderModal = () => {
+        setShowViewOrderModal(false)
 
         initialStateForm()
         setEditDisabled(true)
     }
-    const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
+    const handleCloseDeleteOrderModal = () => setShowDeleteOrderModal(false)
 
     // pagination
     const handleNext = () => setPageInput(parseInt(pageInput) + 1)
@@ -97,9 +103,9 @@ const OrderPage = () => {
             pageInput: pageInput,
         };
 
-        dispatch(landingPageOperations.listCustomers(payload))
+        dispatch(orderPageOperations.listOrders(payload))
             .then((response) => {
-                setCustomerData(response.data)
+                setOrderData(response.data)
                 setTotalPages(response.totalPages)
             })
     }
@@ -133,16 +139,16 @@ const OrderPage = () => {
         setPageInput(1)
     }
 
-    const handleDeleteCustomer = () => {
+    const handleDeleteOrder = () => {
         let payload = {
-            customerId: forInlineDeletion
+            orderlineId: forInlineDeletion
         }
 
-        dispatch(landingPageOperations.deleteCustomer(payload))
+        dispatch(orderPageOperations.deleteOrders(payload))
             .then(() => {
                 submitForm()
             })
-        handleCloseDeleteCustomerModal()
+        handleCloseDeleteOrderModal()
     }
 
     const handleSearchSubmit = (e) => {
@@ -155,23 +161,24 @@ const OrderPage = () => {
 
     }
 
-    const handleGenderDropdown = (e) => {
-        setGender(e)
-    }
+    // const handleGenderDropdown = (e) => {
+    //     setGender(e)
+    // }
 
-    const handleSaveCustomer = () => {
+    const handleSaveOrder = () => {
 
         let payload = {
-            customerId: customerNumber,
+            orderlineId: orderNumber,
             firstName: firstName,
             lastName: lastName,
             middleName: middleName,
-            gender: gender,
-            contactNo: contactNo,
-            address: address
+            orderCode: orderCode,
+            promoName: promoName,
+            price: price,
+            providerName: providerName
         }
 
-        dispatch(landingPageOperations.saveCustomer(payload))
+        dispatch(orderPageOperations.saveOrders(payload))
             .then(() => {
                 submitForm()
                 initialStateForm()
@@ -179,22 +186,23 @@ const OrderPage = () => {
             .catch((e) => {
                 console.log("Error: ", e)
             })
-        setShowAddCustomerModal(false)
+        setShowAddOrderModal(false)
     }
 
-    const handleEditCustomer = () => {
+    const handleEditOrder = () => {
 
         let payload = {
-            customerId: customerNumber,
+            orderlineId: orderNumber,
             firstName: firstName,
             lastName: lastName,
             middleName: middleName,
-            gender: gender,
-            contactNo: contactNo,
-            address: address
+            orderCode: orderCode,
+            promoName: promoName,
+            price: price,
+            providerName: providerName
         }
 
-        dispatch(landingPageOperations.updateCustomer(payload))
+        dispatch(orderPageOperations.updateOrders(payload))
             .then(() => {
                 submitForm()
                 initialStateForm()
@@ -202,7 +210,7 @@ const OrderPage = () => {
             .catch((e) => {
                 console.log("Error: ", e)
             })
-        setShowViewCustomerModal(false)
+        setShowViewOrderModal(false)
         setEditDisabled(true)
     }
 
@@ -211,9 +219,9 @@ const OrderPage = () => {
         setQuery("")
     }
 
-    const handleOpenDeleteCustomerModal = (e) => {
-        setShowDeleteCustomerModal(true)
-        setForInlineDeletion(e.customerId)
+    const handleOpenDeleteOrderModal = (e) => {
+        setShowDeleteOrderModal(true)
+        setForInlineDeletion(e.orderlineId)
     }
 
     useEffect(() => {
@@ -252,18 +260,18 @@ const OrderPage = () => {
                     <Row>
                         <Col xs={12}>
                             <Card>
-                                <CustomerTable
+                                <OrderTable
                                     tableHeader={tableHeaderReducer}
                                     tableColumns={tableColumnsReducer}
-                                    tableList={customerData.map((data) => {
+                                    tableList={orderData.map((data) => {
                                         return (data)
                                     })}
                                     rowButtons={[
-                                        { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewCustomerModal(e)) },
-                                        { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
+                                        { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewOrderModal(e)) },
+                                        { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteOrderModal(e)) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
-                                    handleOpenAddCustomerModal={() => handleOpenAddCustomerModal()}
+                                    handleOpenAddOrderModal={() => handleOpenAddOrderModal()}
                                     pagination={{
                                         name: 'currentPage',
                                         id: 'currentPage',
@@ -294,11 +302,11 @@ const OrderPage = () => {
                 </Container>
             </div>
 
-            <AddCustomerModal
-                handleCloseModal={() => handleCloseAddCustomerModal()}
-                showModal={showAddCustomerModal}
-                handleSuccess={() => handleSaveCustomer()}
-                title={"Add Customer"}
+            {/* <AddCustomerModal
+                handleCloseModal={() => handleCloseAddOrderModal()}
+                showModal={showAddOrderModal}
+                handleSuccess={() => handleSaveOrder()}
+                title={"Add Order"}
                 body={
                     <CustomerAddForm
                         formRows={[
@@ -340,7 +348,7 @@ const OrderPage = () => {
                 title={"Delete Customer"}
                 type={"notification"}
                 body={"Are you sure you want to delete this record?"}
-            />
+            /> */}
         </>
     );
 }

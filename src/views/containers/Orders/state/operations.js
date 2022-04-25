@@ -2,12 +2,12 @@ import apiService from '../../../../utils/apiService';
 import * as path from './apiRoutes';
 import * as Actions from './actions';
 
-export const listCustomers = (payload) => (dispatch) => {
+export const listOrders = (payload) => (dispatch) => {
 
-    return apiService.post(path.GET_CUSTOMER_LIST, payload)
+    return apiService.post(path.GET_ORDER_LIST, payload)
         .then(response => {
             if(response.data.data){
-                dispatch(Actions.listCustomers(response.data.data))
+                dispatch(Actions.listOrders(response.data.data))
                 return response.data.data;
             }
         }).catch(error => {
@@ -15,9 +15,9 @@ export const listCustomers = (payload) => (dispatch) => {
         });
 }
 
-export const deleteCustomer = (payload) => () => {
+export const deleteOrders = (payload) => () => {
 
-    return apiService.delete(path.DELETE_CUSTOMER, payload)
+    return apiService.delete(path.DELETE_ORDER, payload)
         .then(response => {
             //TODO: find something for then() or remove it.
             if(response.data.data){
@@ -28,9 +28,9 @@ export const deleteCustomer = (payload) => () => {
         });
 }
 
-export const saveCustomer = (payload) => () => {
+export const saveOrders = (payload) => () => {
     
-    return apiService.post(path.SAVE_CUSTOMER, payload)
+    return apiService.post(path.SAVE_ORDER, payload)
         .then(response => {
             //TODO: find something for then() or remove it.
             if(response.data.data) {
@@ -41,9 +41,9 @@ export const saveCustomer = (payload) => () => {
         });
 }
 
-export const updateCustomer = (payload) => () => {
+export const updateOrders = (payload) => () => {
     
-    return apiService.post(path.UPDATE_CUSTOMER, payload)
+    return apiService.post(path.UPDATE_ORDER, payload)
         .then(response => {
             //TODO: find something for then() or remove it.
             if(response.data.data) {

@@ -1,4 +1,4 @@
-export const GET_CUSTOMER_LIST = "/crud/customer/search";
-export const DELETE_CUSTOMER = "/crud/customer/delete";
-export const SAVE_CUSTOMER = "/crud/customer/save";
-export const UPDATE_CUSTOMER = "/crud/customer/update";
+export const GET_ORDER_LIST = "/crud/orderline/search";
+export const DELETE_ORDER = "/crud/orderline/delete";
+export const SAVE_ORDER = "/crud/orderline/save";
+export const UPDATE_ORDER = "/crud/orderline/update";
