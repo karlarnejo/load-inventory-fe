@@ -42,6 +42,7 @@ const OrderPage = () => {
     const [promoName, setPromoName] = useState("")
     const [price, setPrice] = useState("")
     const [providerName, setProviderName] = useState("")
+    const [status, setStatus] = useState("")
     const [orderNumber, setOrderNumber] = useState("")
 
     const initialStateForm = () => {
@@ -53,6 +54,7 @@ const OrderPage = () => {
         setPromoName("")
         setPrice("")
         setProviderName("")
+        setStatus("")
         setOrderNumber("")
     }
 
@@ -75,7 +77,8 @@ const OrderPage = () => {
         setPromoName(e.promoName)
         setPrice(e.price)
         setProviderName(e.providerName)
-        setOrderNumber(e.orderNumber)
+        setStatus(e.status)
+        setOrderNumber(e.orderlineId)
     }
     const handleCloseViewOrderModal = () => {
         setShowViewOrderModal(false)
@@ -105,6 +108,7 @@ const OrderPage = () => {
 
         dispatch(orderPageOperations.listOrders(payload))
             .then((response) => {
+                console.log("hee", response)
                 setOrderData(response.data)
                 setTotalPages(response.totalPages)
             })
@@ -161,9 +165,17 @@ const OrderPage = () => {
 
     }
 
-    // const handleGenderDropdown = (e) => {
-    //     setGender(e)
-    // }
+    const handlePromoNameDropdown = (e) => {
+        setPromoName(e)
+    }
+
+    const handleProviderNameDropdown = (e) => {
+        setProviderName(e)
+    }
+
+    const handleStatusDropdown = (e) => {
+        setStatus(e)
+    }
 
     const handleSaveOrder = () => {
 
@@ -175,7 +187,8 @@ const OrderPage = () => {
             orderCode: orderCode,
             promoName: promoName,
             price: price,
-            providerName: providerName
+            providerName: providerName,
+            status: status
         }
 
         dispatch(orderPageOperations.saveOrders(payload))
@@ -199,9 +212,10 @@ const OrderPage = () => {
             orderCode: orderCode,
             promoName: promoName,
             price: price,
-            providerName: providerName
+            providerName: providerName,
+            status: status
         }
-
+        
         dispatch(orderPageOperations.updateOrders(payload))
             .then(() => {
                 submitForm()
@@ -271,7 +285,7 @@ const OrderPage = () => {
                                         { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteOrderModal(e)) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
-                                    handleOpenAddOrderModal={() => handleOpenAddOrderModal()}
+                                    handleOpenAddModal={() => handleOpenAddOrderModal()}
                                     pagination={{
                                         name: 'currentPage',
                                         id: 'currentPage',
@@ -302,53 +316,55 @@ const OrderPage = () => {
                 </Container>
             </div>
 
-            {/* <AddCustomerModal
+            <AddOrderModal
                 handleCloseModal={() => handleCloseAddOrderModal()}
                 showModal={showAddOrderModal}
                 handleSuccess={() => handleSaveOrder()}
                 title={"Add Order"}
                 body={
-                    <CustomerAddForm
+                    <OrderAddForm
                         formRows={[
                             { name: "First Name", type: "text", data: firstName, action: ((e) => setFirstName(e.target.value)) },
                             { name: "Last Name", type: "text", data: lastName, action: ((e) => setLastName(e.target.value)) },
                             { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Address", type: "text", data: address, action: ((e) => setAddress(e.target.value)) },
-                            { name: "Contact No", type: "text", data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", data: gender, action: (handleGenderDropdown) }
+                            { name: "Promo Name", type: "select", data: promoName, action: (handlePromoNameDropdown) },
+                            { name: "Provider Name", type: "select", data: providerName, action: (handleProviderNameDropdown) },
+                            { name: "Price", type: "text", data: price, action: ((e) => setPrice(e.target.value)) },
+                            { name: "Status", type: "select", data: status, action: (handleStatusDropdown) }
                         ]}
                     />
                 }
             />
-            < ViewCustomerModal
-                handleCloseModal={() => handleCloseViewCustomerModal()}
-                showModal={showViewCustomerModal}
-                title={"View Customer"}
+            < ViewOrderModal
+                handleCloseModal={() => handleCloseViewOrderModal()}
+                showModal={showViewOrderModal}
+                title={"View Order"}
                 handleDisabled={() => handleEditDisabled()}
                 disabled={editDisabled}
-                handleSuccess={() => handleEditCustomer()}
+                handleSuccess={() => handleEditOrder()}
                 type={"view"}
                 body={
-                    <CustomerEditForm
+                    <OrderEditForm
                         formRows={[
                             { name: "First Name", type: "text", disabled: editDisabled, data: firstName, action: ((e) => setFirstName(e.target.value)) },
                             { name: "Last Name", type: "text", disabled: editDisabled, data: lastName, action: ((e) => setLastName(e.target.value)) },
                             { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
-                            { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, action: (handleGenderDropdown) }
+                            { name: "Promo Name", type: "select", disabled: editDisabled, data: promoName, action: (handlePromoNameDropdown) },
+                            { name: "Provider Name", type: "select", disabled: editDisabled, data: providerName, action: (handleProviderNameDropdown) },
+                            { name: "Price", type: "text", disabled: editDisabled, data: price, action: ((e) => setPrice(e.target.value)) },
+                            { name: "Status", type: "select", disabled: editDisabled, data: status, action: (handleStatusDropdown) }
                         ]}
                     />
                 }
             />
-            <DeleteCustomerModal
-                handleCloseModal={() => handleCloseDeleteCustomerModal()}
-                handleSuccess={() => handleDeleteCustomer()}
-                showModal={showDeleteCustomerModal}
-                title={"Delete Customer"}
+            <DeleteOrderModal
+                handleCloseModal={() => handleCloseDeleteOrderModal()}
+                handleSuccess={() => handleDeleteOrder()}
+                showModal={showDeleteOrderModal}
+                title={"Delete Order"}
                 type={"notification"}
                 body={"Are you sure you want to delete this record?"}
-            /> */}
+            />
         </>
     );
 }

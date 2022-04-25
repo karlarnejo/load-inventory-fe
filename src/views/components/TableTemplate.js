@@ -164,7 +164,7 @@ let TableTemplate = (props) => {
                 <>
                     <Row>
                         <Col className='mt-3' sm={6}>
-                            <Button className='btn-success' onClick={props.handleOpenAddCustomerModal}>Add Record</Button>
+                            <Button className='btn-success' onClick={props.handleOpenAddModal}>Add Record</Button>
                         </Col>
                         <Col sm={6}>
                             <Form className='form-inline ai-start' onSubmit={props.pagination.handleSearchSubmit}>

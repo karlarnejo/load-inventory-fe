@@ -263,7 +263,7 @@ const CustomerPage = () => {
                                         { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
                                     ]}
                                     handleSortClick={(e) => handleSortClick(e)}
-                                    handleOpenAddCustomerModal={() => handleOpenAddCustomerModal()}
+                                    handleOpenAddModal={() => handleOpenAddCustomerModal()}
                                     pagination={{
                                         name: 'currentPage',
                                         id: 'currentPage',
