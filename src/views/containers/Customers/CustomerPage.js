@@ -307,7 +307,12 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", data: address, action: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", data: gender, action: (handleGenderDropdown) }
+                            { name: "Gender", type: "select", data: gender,
+                                dropdownChoices: [
+                                    { eventKey: "M", choice: "M" },
+                                    { eventKey: "F", choice: "F" }
+                                ],
+                                action: (handleGenderDropdown) }
                         ]}
                     />
                 }
@@ -328,7 +333,12 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, action: (handleGenderDropdown) }
+                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, 
+                                dropdownChoices: [
+                                    { eventKey: "M", choice: "M" },
+                                    { eventKey: "F", choice: "F" }
+                                ],
+                                action: (handleGenderDropdown) }
                         ]}
                     />
                 }

@@ -31,8 +31,13 @@ export const FormControlTemplate = (props) => {
                                             {formRow.data}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
-                                            <Dropdown.Item onSelect={formRow.action} eventKey='M'>M</Dropdown.Item>
-                                            <Dropdown.Item onSelect={formRow.action} eventKey='F'>F</Dropdown.Item>
+                                            {
+                                                formRow.dropdownChoices.map((data) => {
+                                                    return(
+                                                        <Dropdown.Item onSelect={formRow.action} eventKey={data.eventKey}>{data.choice}</Dropdown.Item>
+                                                    )
+                                                })
+                                            }
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Form.Group>
