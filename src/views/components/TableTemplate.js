@@ -43,8 +43,23 @@ let TableTemplate = (props) => {
 
     const sortChecker = (header) => {
 
+        let headerCompare = props.pagination.sortItem
+
+        // TODO: Optimize this later. Add constants for specialheader and headerCompare. Turn to loop or something for dynamic.
+        if(props.pagination.sortItem.includes(".")) {
+            headerCompare = props.pagination.sortItem.split(".")[1]
+        }
+        else if(props.pagination.sortItem === "name") {
+            headerCompare = "firstName"
+        }
+
+        let specialHeader = header
+        if (header === "Name") {
+            specialHeader = "First Name"
+        }
+
         return (
-            headerChecker(header) && header === lodash.startCase(props.pagination.sortItem) ?
+            headerChecker(header) && specialHeader === lodash.startCase(headerCompare) ?
                 (props.pagination.sortDirection === "Ascending") ?
                     <RiSortAsc />
                     : <RiSortDesc />

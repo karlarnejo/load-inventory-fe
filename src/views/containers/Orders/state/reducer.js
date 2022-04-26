@@ -3,9 +3,7 @@ import * as types from "./types";
 const defaultState = {
     table: {
         tableHeader: [
-            "First Name",
-            "Middle Name",
-            "Last Name",
+            "Name",
             "Order Code",
             "Promo Name",
             "Price",
@@ -15,9 +13,7 @@ const defaultState = {
         ],
 
         tableColumns: [
-            "firstName",
-            "middleName",
-            "lastName",
+            "name",
             "orderCode",
             "promoName",
             "price",
