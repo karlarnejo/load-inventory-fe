@@ -1,11 +1,11 @@
 import React from 'react';
 import {Form, Container, Dropdown } from 'react-bootstrap';
+import Select from 'react-select';
 
 export const FormControlTemplate = (props) => {
     return (
             <Form>
-                {props.formRows.map((formRow) => {
-
+                {props.formRows.map((formRow, index) => {
                     switch (formRow.type) {
                         case "file": {
                             // TODO
@@ -26,20 +26,14 @@ export const FormControlTemplate = (props) => {
                             return (
                                 <Form.Group className='m-2'>
                                     <Form.Label>{formRow.name}</Form.Label>
-                                    <Dropdown className=' mt-1'>
-                                        <Dropdown.Toggle disabled={formRow.disabled} className='dropdown-size btn-dropdown' variant='light' placeholder='M' size='sm'>
-                                            {formRow.data}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {
-                                                formRow.dropdownChoices.map((data) => {
-                                                    return(
-                                                        <Dropdown.Item onSelect={formRow.action} eventKey={data.eventKey}>{data.choice}</Dropdown.Item>
-                                                    )
-                                                })
-                                            }
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                    <Select key={index}
+                                        defaultValue={formRow.data}
+                                        onInputChange={formRow.onInputChange ? e => formRow.onInputChange(e): null}
+                                        onChange={formRow.onChange}
+                                        onSelectResetsInput={false}
+                                        options={formRow.dropdownChoices}
+                                        isDisabled={formRow.disabled}
+                                    />
                                 </Form.Group>
                             )
                         }
@@ -48,12 +42,13 @@ export const FormControlTemplate = (props) => {
                                 <Form.Group className='m-2'>
                                     <Form.Label>{formRow.name}</Form.Label>
                                     <Form.Control
+                                        key={index}
                                         type="text"
                                         value={formRow.data}
                                         size='sm'
                                         disabled={formRow.disabled}
                                         placeholder={formRow.name}
-                                        onChange={formRow.action}
+                                        onChange={formRow.onChange}
                                     />
                                 </Form.Group>
                             )

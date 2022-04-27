@@ -156,7 +156,7 @@ const CustomerPage = () => {
     }
 
     const handleGenderDropdown = (e) => {
-        setGender(e)
+        setGender(e.value)
     }
 
     const handleSaveCustomer = () => {
@@ -302,17 +302,17 @@ const CustomerPage = () => {
                 body={
                     <CustomerAddForm
                         formRows={[
-                            { name: "First Name", type: "text", data: firstName, action: ((e) => setFirstName(e.target.value)) },
-                            { name: "Last Name", type: "text", data: lastName, action: ((e) => setLastName(e.target.value)) },
-                            { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Address", type: "text", data: address, action: ((e) => setAddress(e.target.value)) },
-                            { name: "Contact No", type: "text", data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", data: gender,
+                            { name: "First Name", type: "text", data: firstName, onChange: ((e) => setFirstName(e.target.value)) },
+                            { name: "Last Name", type: "text", data: lastName, onChange: ((e) => setLastName(e.target.value)) },
+                            { name: "Middle Name", type: "text", data: middleName, onChange: ((e) => setMiddleName(e.target.value)) },
+                            { name: "Address", type: "text", data: address, onChange: ((e) => setAddress(e.target.value)) },
+                            { name: "Contact No", type: "text", data: contactNo, onChange: ((e) => setContactNo(e.target.value)) },
+                            { name: "Gender", type: "select", data: { value: gender, label: gender },
                                 dropdownChoices: [
-                                    { eventKey: "M", choice: "M" },
-                                    { eventKey: "F", choice: "F" }
+                                    { value: "M", label: "M" },
+                                    { value: "F", label: "F" }
                                 ],
-                                action: (handleGenderDropdown) }
+                                onInputChange: (handleGenderDropdown) }
                         ]}
                     />
                 }
@@ -328,17 +328,17 @@ const CustomerPage = () => {
                 body={
                     <CustomerEditForm
                         formRows={[
-                            { name: "First Name", type: "text", disabled: editDisabled, data: firstName, action: ((e) => setFirstName(e.target.value)) },
-                            { name: "Last Name", type: "text", disabled: editDisabled, data: lastName, action: ((e) => setLastName(e.target.value)) },
-                            { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Address", type: "text", disabled: editDisabled, data: address, action: ((e) => setAddress(e.target.value)) },
-                            { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, action: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data: gender, 
+                            { name: "First Name", type: "text", disabled: editDisabled, data: firstName, onChange: ((e) => setFirstName(e.target.value)) },
+                            { name: "Last Name", type: "text", disabled: editDisabled, data: lastName, onChange: ((e) => setLastName(e.target.value)) },
+                            { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, onChange: ((e) => setMiddleName(e.target.value)) },
+                            { name: "Address", type: "text", disabled: editDisabled, data: address, onChange: ((e) => setAddress(e.target.value)) },
+                            { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, onChange: ((e) => setContactNo(e.target.value)) },
+                            { name: "Gender", type: "select", disabled: editDisabled, data: { value: gender, label: gender }, 
                                 dropdownChoices: [
-                                    { eventKey: "M", choice: "M" },
-                                    { eventKey: "F", choice: "F" }
+                                    { value: "M", label: "M" },
+                                    { value: "F", label: "F" }
                                 ],
-                                action: (handleGenderDropdown) }
+                                onInputChange: (handleGenderDropdown) }
                         ]}
                     />
                 }

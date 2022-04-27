@@ -34,8 +34,15 @@ const OrderPage = () => {
     const [editDisabled, setEditDisabled] = useState(true)
     const [isClickedClear, setIsClickedClear] = useState(false)
 
+    const [customerSearchQuery, setCustomerSearchQuery] = useState("")
+    const [promoSearchQuery, setPromoSearchQuery] = useState("")
+    const [customerId, setCustomerId] = useState("")
+    const [promoId, setPromoId] = useState("")
+    const [providerId, setProviderId] = useState("")
+    const [fullName, setFullname] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
+    const [number, setNumber] = useState("")
     const [middleName, setMiddleName] = useState("")
     const [orderCode, setOrderCode] = useState("")
     const [createdAt, setCreatedAt] = useState("")
@@ -44,6 +51,8 @@ const OrderPage = () => {
     const [providerName, setProviderName] = useState("")
     const [status, setStatus] = useState("")
     const [orderNumber, setOrderNumber] = useState("")
+    const [customerChoices, setCustomerChoices] = useState("")
+    const [promoChoices, setPromoChoices] = useState("")
 
     const initialStateForm = () => {
         setFirstName("")
@@ -56,6 +65,11 @@ const OrderPage = () => {
         setProviderName("")
         setStatus("")
         setOrderNumber("")
+        setFullname("")
+        setCustomerId("")
+        setNumber("")
+        setPromoId("")
+        setProviderId("")
     }
 
     // modal
@@ -69,9 +83,9 @@ const OrderPage = () => {
     const handleOpenViewOrderModal = (e) => {
         setShowViewOrderModal(true)
 
-        setFirstName(e.firstName)
-        setLastName(e.lastName)
-        setMiddleName(e.middleName)
+        // setFirstName(e.firstName)
+        // setLastName(e.lastName)
+        // setMiddleName(e.middleName)
         setOrderCode(e.orderCode)
         setCreatedAt(e.createdAt)
         setPromoName(e.promoName)
@@ -79,6 +93,11 @@ const OrderPage = () => {
         setProviderName(e.providerName)
         setStatus(e.status)
         setOrderNumber(e.orderlineId)
+        setFullname(e.name)
+        setProviderId(e.providerId)
+        setCustomerId(e.customerId)
+        setPromoId(e.promoId)
+        setNumber(e.number)
     }
     const handleCloseViewOrderModal = () => {
         setShowViewOrderModal(false)
@@ -108,7 +127,6 @@ const OrderPage = () => {
 
         dispatch(orderPageOperations.listOrders(payload))
             .then((response) => {
-                console.log("hee", response)
                 setOrderData(response.data)
                 setTotalPages(response.totalPages)
             })
@@ -129,7 +147,11 @@ const OrderPage = () => {
     }
 
     const handleSortClick = (header) => {
-        const refinedeHeader = lodash.camelCase(header)
+
+        //TODO: Revisit this again to revise for optimization.
+        let refinedeHeader = ""
+        
+        header === "Name" ? refinedeHeader = "customer.firstName" : refinedeHeader = lodash.camelCase(header)        
         let tempSortDirection = ""
 
         sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
@@ -165,16 +187,32 @@ const OrderPage = () => {
 
     }
 
-    const handlePromoNameDropdown = (e) => {
-        setPromoName(e)
+    const handleCustomerInputChangeDropdown = (e) => {
+        //TODO make this work so that useeffect will work on cust dropdown
+
+        setCustomerSearchQuery(e)
+        setFullname(e)
+    }
+
+    const handleCustomerInputSelectDropdown = (e) => {
+        setCustomerId(e.value)
+    }
+
+    const handlePromoInputChangeDropdown = (e) => {
+        //TODO make this work so that useeffect will work on cust dropdown
+        setPromoSearchQuery(e)
+    }
+
+    const handlePromoInputSelectDropdown = (e) => {
+        setPromoId(e.value)
     }
 
     const handleProviderNameDropdown = (e) => {
         setProviderName(e)
     }
 
-    const handleStatusDropdown = (e) => {
-        setStatus(e)
+    const handleStatusInputSelectDropdown = (e) => {
+        setStatus(e.value)
     }
 
     const handleSaveOrder = () => {
@@ -188,7 +226,9 @@ const OrderPage = () => {
             promoName: promoName,
             price: price,
             providerName: providerName,
-            status: status
+            customerId: customerId,
+            status: status,
+            number:number
         }
 
         dispatch(orderPageOperations.saveOrders(payload))
@@ -197,6 +237,7 @@ const OrderPage = () => {
                 initialStateForm()
             })
             .catch((e) => {
+                //TODO: Add toast message
                 console.log("Error: ", e)
             })
         setShowAddOrderModal(false)
@@ -206,22 +247,21 @@ const OrderPage = () => {
 
         let payload = {
             orderlineId: orderNumber,
-            firstName: firstName,
-            lastName: lastName,
-            middleName: middleName,
             orderCode: orderCode,
-            promoName: promoName,
             price: price,
-            providerName: providerName,
+            customerId: customerId,
+            promoId: promoId,
+            number: number,
             status: status
         }
-        
+
         dispatch(orderPageOperations.updateOrders(payload))
             .then(() => {
                 submitForm()
                 initialStateForm()
             })
             .catch((e) => {
+                //TODO: Add toast message
                 console.log("Error: ", e)
             })
         setShowViewOrderModal(false)
@@ -265,7 +305,39 @@ const OrderPage = () => {
         }
 
         setIsClickedClear(false)
-    }, [isClickedClear])
+    }, [isClickedClear]) //eslint-disable-line
+
+    useEffect(() => {
+
+        let payload = {
+            searchQuery: customerSearchQuery
+        }
+
+        dispatch(orderPageOperations.listCustomerNames(payload))
+            .then((response) => {
+                setCustomerChoices(response)
+            })
+            .catch((e) => {
+                //TODO: Add toast message
+                console.log("Error: ", e)
+            })
+    },[customerSearchQuery]) //eslint-disable-line
+
+    useEffect(() => {
+
+        let payload = {
+            searchQuery: promoSearchQuery
+        }
+
+        dispatch(orderPageOperations.listPromoNames(payload))
+            .then((response) => {
+                setPromoChoices(response)
+            })
+            .catch((e) => {
+                //TODO: Add toast message
+                console.log("Error: ", e)
+            })
+    },[promoSearchQuery]) //eslint-disable-line
 
     return (
         <>
@@ -324,13 +396,13 @@ const OrderPage = () => {
                 body={
                     <OrderAddForm
                         formRows={[
-                            { name: "First Name", type: "text", data: firstName, action: ((e) => setFirstName(e.target.value)) },
-                            { name: "Last Name", type: "text", data: lastName, action: ((e) => setLastName(e.target.value)) },
-                            { name: "Middle Name", type: "text", data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Promo Name", type: "select", data: promoName, action: (handlePromoNameDropdown) },
-                            { name: "Provider Name", type: "select", data: providerName, action: (handleProviderNameDropdown) },
-                            { name: "Price", type: "text", data: price, action: ((e) => setPrice(e.target.value)) },
-                            { name: "Status", type: "select", data: status, action: (handleStatusDropdown) }
+                            { name: "First Name", type: "text", data: firstName, onInputChange: ((e) => setFirstName(e.target.value)) },
+                            { name: "Last Name", type: "text", data: lastName, onInputChange: ((e) => setLastName(e.target.value)) },
+                            { name: "Middle Name", type: "text", data: middleName, onInputChange: ((e) => setMiddleName(e.target.value)) },
+                            { name: "Promo Name", type: "select", data: promoName, onInputChange: (handlePromoInputChangeDropdown) },
+                            { name: "Provider Name", type: "select", data: providerName, onInputChange: (handleProviderNameDropdown) },
+                            { name: "Price", type: "text", data: price, onChange: ((e) => setPrice(e.target.value)) },
+                            { name: "Status", type: "select", data: status, onInputChange: (handlePromoInputSelectDropdown) }
                         ]}
                     />
                 }
@@ -345,14 +417,26 @@ const OrderPage = () => {
                 type={"view"}
                 body={
                     <OrderEditForm
+                        //TODO: temporary dropdown choices.
                         formRows={[
-                            { name: "First Name", type: "text", disabled: editDisabled, data: firstName, action: ((e) => setFirstName(e.target.value)) },
-                            { name: "Last Name", type: "text", disabled: editDisabled, data: lastName, action: ((e) => setLastName(e.target.value)) },
-                            { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, action: ((e) => setMiddleName(e.target.value)) },
-                            { name: "Promo Name", type: "select", disabled: editDisabled, data: promoName, action: (handlePromoNameDropdown) },
-                            { name: "Provider Name", type: "select", disabled: editDisabled, data: providerName, action: (handleProviderNameDropdown) },
-                            { name: "Price", type: "text", disabled: editDisabled, data: price, action: ((e) => setPrice(e.target.value)) },
-                            { name: "Status", type: "select", disabled: editDisabled, data: status, action: (handleStatusDropdown) }
+                            { name: "Name", type: "select", disabled: editDisabled, data: { value: customerId, label: fullName },
+                                dropdownChoices: customerChoices,
+                                onInputChange: (handleCustomerInputChangeDropdown),
+                                onChange: (handleCustomerInputSelectDropdown) },
+                            { name: "Number", type: "text", disabled: editDisabled, data: number, onChange: ((e) => setNumber(e.target.value)) },
+                            { name: "Promo Name", type: "select", disabled: editDisabled, data: { value: promoId, label: promoName },
+                                dropdownChoices: promoChoices,
+                                onInputChange: (handlePromoInputChangeDropdown),
+                                onChange: (handlePromoInputSelectDropdown) },
+                            { name: "Provider Name", type: "text", disabled: true, data: providerName },
+                            { name: "Price", type: "text", disabled: true, data: price, onChange: ((e) => setPrice(e.target.value)) },
+                            { name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: status },
+                                dropdownChoices: [
+                                    { value: 1, label: "Completed" },
+                                    { value: 2, label: "Ongoing" },
+                                    { value: 3, label: "Failed" }
+                                ],
+                                onChange: (handleStatusInputSelectDropdown) }
                         ]}
                     />
                 }

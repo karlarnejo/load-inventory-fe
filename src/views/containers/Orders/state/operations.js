@@ -3,12 +3,37 @@ import * as path from './apiRoutes';
 import * as Actions from './actions';
 
 export const listOrders = (payload) => (dispatch) => {
-    console.log("aaa", payload)
 
     return apiService.post(path.GET_ORDER_LIST, payload)
         .then(response => {
             if(response.data.data){
                 dispatch(Actions.listOrders(response.data.data))
+                return response.data.data;
+            }
+        }).catch(error => {
+            throw error;
+        });
+}
+
+export const listCustomerNames = (payload) => (dispatch) => {
+
+    return apiService.post(path.SEARCH_NAME, payload)
+        .then(response => {
+            if(response.data.data){
+                // dispatch(Actions.listOrders(response.data.data))
+                return response.data.data;
+            }
+        }).catch(error => {
+            throw error;
+        });
+}
+
+export const listPromoNames = (payload) => (dispatch) => {
+
+    return apiService.post(path.SEARCH_PROMONAME, payload)
+        .then(response => {
+            if(response.data.data){
+                // dispatch(Actions.listOrders(response.data.data))
                 return response.data.data;
             }
         }).catch(error => {

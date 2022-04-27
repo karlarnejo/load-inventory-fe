@@ -4,6 +4,8 @@ const defaultState = {
     table: {
         tableHeader: [
             "Name",
+            "Number",
+            "Created At",
             "Order Code",
             "Promo Name",
             "Price",
@@ -14,6 +16,8 @@ const defaultState = {
 
         tableColumns: [
             "name",
+            "number",
+            "createdAt",
             "orderCode",
             "promoName",
             "price",
