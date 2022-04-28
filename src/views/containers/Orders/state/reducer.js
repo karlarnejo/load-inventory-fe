@@ -9,6 +9,7 @@ const defaultState = {
             "Order Code",
             "Promo Name",
             "Price",
+            "Discount",
             "Provider Name",
             "Status",
             "Actions"
@@ -21,8 +22,9 @@ const defaultState = {
             "orderCode",
             "promoName",
             "price",
+            "discount",
             "providerName",
-            "status"
+            "statusMeaning"
         ],
     },
 

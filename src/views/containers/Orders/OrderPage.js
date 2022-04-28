@@ -40,10 +40,7 @@ const OrderPage = () => {
     const [promoId, setPromoId] = useState("")
     const [providerId, setProviderId] = useState("")
     const [fullName, setFullname] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
     const [number, setNumber] = useState("")
-    const [middleName, setMiddleName] = useState("")
     const [orderCode, setOrderCode] = useState("")
     const [createdAt, setCreatedAt] = useState("")
     const [promoName, setPromoName] = useState("")
@@ -53,11 +50,10 @@ const OrderPage = () => {
     const [orderNumber, setOrderNumber] = useState("")
     const [customerChoices, setCustomerChoices] = useState("")
     const [promoChoices, setPromoChoices] = useState("")
+    const [discount, setDiscount] = useState("")
+    const [statusMeaning, setStatusMeaning] = useState("")
 
     const initialStateForm = () => {
-        setFirstName("")
-        setLastName("")
-        setMiddleName("")
         setOrderCode("")
         setCreatedAt("")
         setPromoName("")
@@ -70,6 +66,8 @@ const OrderPage = () => {
         setNumber("")
         setPromoId("")
         setProviderId("")
+        setDiscount("")
+        setStatusMeaning("")
     }
 
     // modal
@@ -83,9 +81,6 @@ const OrderPage = () => {
     const handleOpenViewOrderModal = (e) => {
         setShowViewOrderModal(true)
 
-        // setFirstName(e.firstName)
-        // setLastName(e.lastName)
-        // setMiddleName(e.middleName)
         setOrderCode(e.orderCode)
         setCreatedAt(e.createdAt)
         setPromoName(e.promoName)
@@ -98,6 +93,8 @@ const OrderPage = () => {
         setCustomerId(e.customerId)
         setPromoId(e.promoId)
         setNumber(e.number)
+        setDiscount(e.discount)
+        setStatusMeaning(e.statusMeaning)
     }
     const handleCloseViewOrderModal = () => {
         setShowViewOrderModal(false)
@@ -219,16 +216,12 @@ const OrderPage = () => {
 
         let payload = {
             orderlineId: orderNumber,
-            firstName: firstName,
-            lastName: lastName,
-            middleName: middleName,
             orderCode: orderCode,
-            promoName: promoName,
-            price: price,
             providerName: providerName,
             customerId: customerId,
             status: status,
-            number:number
+            number: number,
+            discount: discount
         }
 
         dispatch(orderPageOperations.saveOrders(payload))
@@ -244,7 +237,6 @@ const OrderPage = () => {
     }
 
     const handleEditOrder = () => {
-
         let payload = {
             orderlineId: orderNumber,
             orderCode: orderCode,
@@ -252,7 +244,10 @@ const OrderPage = () => {
             customerId: customerId,
             promoId: promoId,
             number: number,
-            status: status
+            status: status,
+            createdAt: createdAt,
+            updatedAt: new Date(),
+            discount: discount
         }
 
         dispatch(orderPageOperations.updateOrders(payload))
@@ -350,6 +345,7 @@ const OrderPage = () => {
                                     tableHeader={tableHeaderReducer}
                                     tableColumns={tableColumnsReducer}
                                     tableList={orderData.map((data) => {
+                                        // new Date(data.createdAt.toUTCString0 ())
                                         return (data)
                                     })}
                                     rowButtons={[
@@ -396,9 +392,6 @@ const OrderPage = () => {
                 body={
                     <OrderAddForm
                         formRows={[
-                            { name: "First Name", type: "text", data: firstName, onInputChange: ((e) => setFirstName(e.target.value)) },
-                            { name: "Last Name", type: "text", data: lastName, onInputChange: ((e) => setLastName(e.target.value)) },
-                            { name: "Middle Name", type: "text", data: middleName, onInputChange: ((e) => setMiddleName(e.target.value)) },
                             { name: "Promo Name", type: "select", data: promoName, onInputChange: (handlePromoInputChangeDropdown) },
                             { name: "Provider Name", type: "select", data: providerName, onInputChange: (handleProviderNameDropdown) },
                             { name: "Price", type: "text", data: price, onChange: ((e) => setPrice(e.target.value)) },
@@ -430,7 +423,8 @@ const OrderPage = () => {
                                 onChange: (handlePromoInputSelectDropdown) },
                             { name: "Provider Name", type: "text", disabled: true, data: providerName },
                             { name: "Price", type: "text", disabled: true, data: price, onChange: ((e) => setPrice(e.target.value)) },
-                            { name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: status },
+                            { name: "Discount", type: "text", disabled: editDisabled, data: discount, onChange: ((e) => setDiscount(e.target.value)) },
+                            { name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: statusMeaning },
                                 dropdownChoices: [
                                     { value: 1, label: "Completed" },
                                     { value: 2, label: "Ongoing" },
