@@ -240,12 +240,10 @@ const OrderPage = () => {
         let payload = {
             orderlineId: orderNumber,
             orderCode: orderCode,
-            price: price,
             customerId: customerId,
             promoId: promoId,
             number: number,
             status: status,
-            createdAt: createdAt,
             updatedAt: new Date(),
             discount: discount
         }
@@ -345,7 +343,10 @@ const OrderPage = () => {
                                     tableHeader={tableHeaderReducer}
                                     tableColumns={tableColumnsReducer}
                                     tableList={orderData.map((data) => {
-                                        // new Date(data.createdAt.toUTCString0 ())
+                                        //TODO: Format strings
+                                        data.updatedAt = data.updatedAt.split(".")[0].replace("T", " ")
+                                        data.createdAt = data.createdAt.split(".")[0].replace("T", " ")
+
                                         return (data)
                                     })}
                                     rowButtons={[

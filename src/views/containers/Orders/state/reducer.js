@@ -5,26 +5,28 @@ const defaultState = {
         tableHeader: [
             "Name",
             "Number",
-            "Created At",
-            "Order Code",
+            // "Order Code",
             "Promo Name",
             "Price",
-            "Discount",
+            // "Discount",
             "Provider Name",
             "Status",
+            "Created At",
+            "Updated At",
             "Actions"
         ],
 
         tableColumns: [
             "name",
             "number",
-            "createdAt",
-            "orderCode",
+            // "orderCode",
             "promoName",
             "price",
-            "discount",
+            // "discount",
             "providerName",
-            "statusMeaning"
+            "statusMeaning",
+            "createdAt",
+            "updatedAt"
         ],
     },
 
