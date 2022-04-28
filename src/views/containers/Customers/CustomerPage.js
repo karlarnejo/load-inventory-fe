@@ -191,7 +191,8 @@ const CustomerPage = () => {
             middleName: middleName,
             gender: gender,
             contactNo: contactNo,
-            address: address
+            address: address,
+            updatedAt: new Date()
         }
 
         dispatch(customerPageOperations.updateCustomer(payload))
