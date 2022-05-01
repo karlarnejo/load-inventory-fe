@@ -68,6 +68,7 @@ export const deleteOrders = (payload) => () => {
 }
 
 export const saveOrders = (payload) => () => {
+    console.log("payload",payload)
     
     return apiService.post(path.SAVE_ORDER, payload)
         .then(response => {

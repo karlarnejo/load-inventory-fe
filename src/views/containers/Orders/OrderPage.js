@@ -147,8 +147,8 @@ const OrderPage = () => {
 
         //TODO: Revisit this again to revise for optimization.
         let refinedeHeader = ""
-        
-        header === "Name" ? refinedeHeader = "customer.firstName" : refinedeHeader = lodash.camelCase(header)        
+
+        header === "Name" ? refinedeHeader = "customer.firstName" : refinedeHeader = lodash.camelCase(header)
         let tempSortDirection = ""
 
         sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
@@ -218,11 +218,13 @@ const OrderPage = () => {
         let payload = {
             orderlineId: orderNumber,
             orderCode: orderCode,
-            providerName: providerName,
+            promoId: promoId,
             customerId: customerId,
             status: status,
             number: number,
-            price: price
+            price: price,
+            updatedAt: new Date(),
+            createdAt: new Date()
         }
 
         dispatch(orderPageOperations.saveOrders(payload))
@@ -315,7 +317,7 @@ const OrderPage = () => {
                 //TODO: Add toast message
                 console.log("Error: ", e)
             })
-    },[customerSearchQuery]) //eslint-disable-line
+    }, [customerSearchQuery]) //eslint-disable-line
 
     useEffect(() => {
 
@@ -332,7 +334,7 @@ const OrderPage = () => {
                 //TODO: Add toast message
                 console.log("Error: ", e)
             })
-    },[promoSearchQuery, providerId]) //eslint-disable-line
+    }, [promoSearchQuery, providerId]) //eslint-disable-line
 
     useEffect(() => {
 
@@ -348,7 +350,7 @@ const OrderPage = () => {
                 //TODO: Add toast message
                 console.log("Error: ", e)
             })
-    },[providerSearchQuery]) //eslint-disable-line
+    }, [providerSearchQuery]) //eslint-disable-line
 
     return (
         <>
@@ -411,10 +413,35 @@ const OrderPage = () => {
                 body={
                     <OrderAddForm
                         formRows={[
-                            { name: "Promo Name", type: "select", data: promoName, onInputChange: (handlePromoInputChangeDropdown) },
-                            { name: "Provider Name", type: "select", data: providerName, onInputChange: (handleProviderInputChangeDropdown) },
+                            {
+                                name: "Name", type: "select", data: { value: customerId, label: fullName },
+                                dropdownChoices: customerChoices,
+                                onInputChange: (handleCustomerInputChangeDropdown),
+                                onChange: (handleCustomerInputSelectDropdown)
+                            },
+                            { name: "Number", type: "text", data: number, onChange: ((e) => setNumber(e.target.value)) },
+                            {
+                                name: "Provider Name", type: "select", data: { value: providerId, label: providerName },
+                                dropdownChoices: providerChoices,
+                                onInputChange: (handleProviderInputChangeDropdown),
+                                onChange: (handleProviderInputSelectDropdown)
+                            },
+                            {
+                                name: "Promo Name", type: "select", data: { value: promoId, label: promoName },
+                                dropdownChoices: promoChoices,
+                                onInputChange: (handlePromoInputChangeDropdown),
+                                onChange: (handlePromoInputSelectDropdown)
+                            },
                             { name: "Price", type: "text", data: price, onChange: ((e) => setPrice(e.target.value)) },
-                            { name: "Status", type: "select", data: status, onInputChange: (handlePromoInputSelectDropdown) }
+                            {
+                                name: "Status", type: "select", data: { value: status, label: statusMeaning },
+                                dropdownChoices: [
+                                    { value: 1, label: "Completed" },
+                                    { value: 2, label: "Ongoing" },
+                                    { value: 3, label: "Failed" }
+                                ],
+                                onChange: (handleStatusInputSelectDropdown)
+                            }
                         ]}
                     />
                 }
@@ -431,27 +458,35 @@ const OrderPage = () => {
                     <OrderEditForm
                         //TODO: temporary dropdown choices.
                         formRows={[
-                            { name: "Name", type: "select", disabled: editDisabled, data: { value: customerId, label: fullName },
+                            {
+                                name: "Name", type: "select", disabled: editDisabled, data: { value: customerId, label: fullName },
                                 dropdownChoices: customerChoices,
                                 onInputChange: (handleCustomerInputChangeDropdown),
-                                onChange: (handleCustomerInputSelectDropdown) },
+                                onChange: (handleCustomerInputSelectDropdown)
+                            },
                             { name: "Number", type: "text", disabled: editDisabled, data: number, onChange: ((e) => setNumber(e.target.value)) },
-                            { name: "Provider Name", type: "select", disabled: editDisabled, data: { value: providerId, label: providerName },
+                            {
+                                name: "Provider Name", type: "select", disabled: editDisabled, data: { value: providerId, label: providerName },
                                 dropdownChoices: providerChoices,
                                 onInputChange: (handleProviderInputChangeDropdown),
-                                onChange: (handleProviderInputSelectDropdown) },
-                            { name: "Promo Name", type: "select", disabled: editDisabled, data: { value: promoId, label: promoName },
+                                onChange: (handleProviderInputSelectDropdown)
+                            },
+                            {
+                                name: "Promo Name", type: "select", disabled: editDisabled, data: { value: promoId, label: promoName },
                                 dropdownChoices: promoChoices,
                                 onInputChange: (handlePromoInputChangeDropdown),
-                                onChange: (handlePromoInputSelectDropdown) },
+                                onChange: (handlePromoInputSelectDropdown)
+                            },
                             { name: "Price", type: "text", disabled: editDisabled, data: price, onChange: ((e) => setPrice(e.target.value)) },
-                            { name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: statusMeaning },
+                            {
+                                name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: statusMeaning },
                                 dropdownChoices: [
                                     { value: 1, label: "Completed" },
                                     { value: 2, label: "Ongoing" },
                                     { value: 3, label: "Failed" }
                                 ],
-                                onChange: (handleStatusInputSelectDropdown) }
+                                onChange: (handleStatusInputSelectDropdown)
+                            }
                         ]}
                     />
                 }
