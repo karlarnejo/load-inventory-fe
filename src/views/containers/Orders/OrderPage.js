@@ -36,6 +36,7 @@ const OrderPage = () => {
 
     const [customerSearchQuery, setCustomerSearchQuery] = useState("")
     const [promoSearchQuery, setPromoSearchQuery] = useState("")
+    const [providerSearchQuery, setProviderSearchQuery] = useState("")
     const [customerId, setCustomerId] = useState("")
     const [promoId, setPromoId] = useState("")
     const [providerId, setProviderId] = useState("")
@@ -50,7 +51,7 @@ const OrderPage = () => {
     const [orderNumber, setOrderNumber] = useState("")
     const [customerChoices, setCustomerChoices] = useState("")
     const [promoChoices, setPromoChoices] = useState("")
-    const [discount, setDiscount] = useState("")
+    const [providerChoices, setProviderChoices] = useState("")
     const [statusMeaning, setStatusMeaning] = useState("")
 
     const initialStateForm = () => {
@@ -66,7 +67,7 @@ const OrderPage = () => {
         setNumber("")
         setPromoId("")
         setProviderId("")
-        setDiscount("")
+        setPrice("")
         setStatusMeaning("")
     }
 
@@ -93,7 +94,6 @@ const OrderPage = () => {
         setCustomerId(e.customerId)
         setPromoId(e.promoId)
         setNumber(e.number)
-        setDiscount(e.discount)
         setStatusMeaning(e.statusMeaning)
     }
     const handleCloseViewOrderModal = () => {
@@ -185,8 +185,6 @@ const OrderPage = () => {
     }
 
     const handleCustomerInputChangeDropdown = (e) => {
-        //TODO make this work so that useeffect will work on cust dropdown
-
         setCustomerSearchQuery(e)
         setFullname(e)
     }
@@ -195,17 +193,20 @@ const OrderPage = () => {
         setCustomerId(e.value)
     }
 
+    const handleProviderInputChangeDropdown = (e) => {
+        setProviderSearchQuery(e)
+    }
+
+    const handleProviderInputSelectDropdown = (e) => {
+        setProviderId(e.value)
+    }
+
     const handlePromoInputChangeDropdown = (e) => {
-        //TODO make this work so that useeffect will work on cust dropdown
         setPromoSearchQuery(e)
     }
 
     const handlePromoInputSelectDropdown = (e) => {
         setPromoId(e.value)
-    }
-
-    const handleProviderNameDropdown = (e) => {
-        setProviderName(e)
     }
 
     const handleStatusInputSelectDropdown = (e) => {
@@ -221,7 +222,7 @@ const OrderPage = () => {
             customerId: customerId,
             status: status,
             number: number,
-            discount: discount
+            price: price
         }
 
         dispatch(orderPageOperations.saveOrders(payload))
@@ -245,7 +246,7 @@ const OrderPage = () => {
             number: number,
             status: status,
             updatedAt: new Date(),
-            discount: discount
+            price: price
         }
 
         dispatch(orderPageOperations.updateOrders(payload))
@@ -332,6 +333,22 @@ const OrderPage = () => {
             })
     },[promoSearchQuery]) //eslint-disable-line
 
+    useEffect(() => {
+
+        let payload = {
+            searchQuery: providerSearchQuery
+        }
+
+        dispatch(orderPageOperations.listProviderNames(payload))
+            .then((response) => {
+                setProviderChoices(response)
+            })
+            .catch((e) => {
+                //TODO: Add toast message
+                console.log("Error: ", e)
+            })
+    },[providerSearchQuery]) //eslint-disable-line
+
     return (
         <>
             <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
@@ -394,7 +411,7 @@ const OrderPage = () => {
                     <OrderAddForm
                         formRows={[
                             { name: "Promo Name", type: "select", data: promoName, onInputChange: (handlePromoInputChangeDropdown) },
-                            { name: "Provider Name", type: "select", data: providerName, onInputChange: (handleProviderNameDropdown) },
+                            { name: "Provider Name", type: "select", data: providerName, onInputChange: (handleProviderInputChangeDropdown) },
                             { name: "Price", type: "text", data: price, onChange: ((e) => setPrice(e.target.value)) },
                             { name: "Status", type: "select", data: status, onInputChange: (handlePromoInputSelectDropdown) }
                         ]}
@@ -418,13 +435,15 @@ const OrderPage = () => {
                                 onInputChange: (handleCustomerInputChangeDropdown),
                                 onChange: (handleCustomerInputSelectDropdown) },
                             { name: "Number", type: "text", disabled: editDisabled, data: number, onChange: ((e) => setNumber(e.target.value)) },
+                            { name: "Provider Name", type: "select", disabled: editDisabled, data: { value: providerId, label: providerName },
+                                dropdownChoices: providerChoices,
+                                onInputChange: (handleProviderInputChangeDropdown),
+                                onChange: (handleProviderInputSelectDropdown) },
                             { name: "Promo Name", type: "select", disabled: editDisabled, data: { value: promoId, label: promoName },
                                 dropdownChoices: promoChoices,
                                 onInputChange: (handlePromoInputChangeDropdown),
                                 onChange: (handlePromoInputSelectDropdown) },
-                            { name: "Provider Name", type: "text", disabled: true, data: providerName },
-                            { name: "Price", type: "text", disabled: true, data: price, onChange: ((e) => setPrice(e.target.value)) },
-                            { name: "Discount", type: "text", disabled: editDisabled, data: discount, onChange: ((e) => setDiscount(e.target.value)) },
+                            { name: "Price", type: "text", disabled: editDisabled, data: price, onChange: ((e) => setPrice(e.target.value)) },
                             { name: "Status", type: "select", disabled: editDisabled, data: { value: status, label: statusMeaning },
                                 dropdownChoices: [
                                     { value: 1, label: "Completed" },

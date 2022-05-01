@@ -41,6 +41,19 @@ export const listPromoNames = (payload) => (dispatch) => {
         });
 }
 
+export const listProviderNames = (payload) => (dispatch) => {
+
+    return apiService.post(path.SEARCH_PROVIDERNAME, payload)
+        .then(response => {
+            if(response.data.data){
+                // dispatch(Actions.listOrders(response.data.data))
+                return response.data.data;
+            }
+        }).catch(error => {
+            throw error;
+        });
+}
+
 export const deleteOrders = (payload) => () => {
 
     return apiService.delete(path.DELETE_ORDER, payload)
