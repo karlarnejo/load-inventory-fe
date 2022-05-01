@@ -320,7 +320,8 @@ const OrderPage = () => {
     useEffect(() => {
 
         let payload = {
-            searchQuery: promoSearchQuery
+            searchQuery: promoSearchQuery,
+            providerId: providerId
         }
 
         dispatch(orderPageOperations.listPromoNames(payload))
@@ -331,7 +332,7 @@ const OrderPage = () => {
                 //TODO: Add toast message
                 console.log("Error: ", e)
             })
-    },[promoSearchQuery]) //eslint-disable-line
+    },[promoSearchQuery, providerId]) //eslint-disable-line
 
     useEffect(() => {
 
