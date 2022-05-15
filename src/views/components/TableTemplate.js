@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Button, ButtonToolbar, Pagination, FormControl, InputGroup, Form, Dropdown, Col, Row, Card } from 'react-bootstrap';
-import lodash from 'lodash'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri';
 
 let TableTemplate = (props) => {
@@ -42,24 +41,16 @@ let TableTemplate = (props) => {
     }
 
     const sortChecker = (header) => {
+        let tempHeader = null
 
-        let headerCompare = props.pagination.sortItem
-
-        // TODO: Optimize this later. Add constants for specialheader and headerCompare. Turn to loop or something for dynamic.
-        if(props.pagination.sortItem.includes(".")) {
-            headerCompare = props.pagination.sortItem.split(".")[1]
-        }
-        else if(props.pagination.sortItem === "name") {
-            headerCompare = "firstName"
-        }
-
-        let specialHeader = header
-        if (header === "Name") {
-            specialHeader = "First Name"
-        }
+        props.headerConstant.map((data) => {
+            if(data.header === header) {
+                tempHeader = data.header
+            }            
+        })
 
         return (
-            headerChecker(header) && specialHeader === lodash.startCase(headerCompare) ?
+            headerChecker(header) && props.pagination.sortItemHeader === tempHeader ?
                 (props.pagination.sortDirection === "Ascending") ?
                     <RiSortAsc />
                     : <RiSortDesc />

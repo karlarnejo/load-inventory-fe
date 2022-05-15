@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { operations as orderPageOperations } from './state';
 import OrderTable from '../../components/TableTemplate';
 import { Row, Col, Card, Container } from 'react-bootstrap';
-import lodash from 'lodash'
 import { ModalTemplate as AddOrderModal } from '../../components/ModalTemplate'
 import { ModalTemplate as ViewOrderModal } from '../../components/ModalTemplate'
 import { ModalTemplate as DeleteOrderModal } from '../../components/ModalTemplate'
 import { FormControlTemplate as OrderAddForm } from '../../components/FormControlTemplate'
 import { FormControlTemplate as OrderEditForm } from '../../components/FormControlTemplate'
+import { ORDERLINE_HEADER_DATA, DEFAULT_ORDERLINE_SORT_ITEM } from "../../../utils/constants";
 
 const OrderPage = () => {
 
@@ -25,7 +25,8 @@ const OrderPage = () => {
     const [query, setQuery] = useState("")
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [isResultLoading, setIsResultLoading] = useState(false)
-    const [sortItem, setSortItem] = useState("customer.firstName")
+    const [sortItem, setSortItem] = useState(DEFAULT_ORDERLINE_SORT_ITEM)
+    const [sortItemHeader, setSortItemHeader] = useState("Name")
     const [sortDirection, setSortDirection] = useState("Ascending")
     const [showAddOrderModal, setShowAddOrderModal] = useState(false)
     const [showViewOrderModal, setShowViewOrderModal] = useState(false)
@@ -144,17 +145,14 @@ const OrderPage = () => {
     }
 
     const handleSortClick = (header) => {
+        ORDERLINE_HEADER_DATA.map((data) => {
+            if(data.header === header) {
+                setSortItem(data.data)
+                setSortItemHeader(data.header)
+            }
+        })
 
-        //TODO: Revisit this again to revise for optimization.
-        let refinedeHeader = ""
-
-        header === "Name" ? refinedeHeader = "customer.firstName" : refinedeHeader = lodash.camelCase(header)
-        let tempSortDirection = ""
-
-        sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
-
-        setSortItem(refinedeHeader)
-        setSortDirection(tempSortDirection)
+        sortDirection === "Ascending" ? setSortDirection("Descending") : setSortDirection("Ascending");
     }
 
     const handleItemPerPageSelect = (event) => {
@@ -362,6 +360,7 @@ const OrderPage = () => {
                                 <OrderTable
                                     tableHeader={tableHeaderReducer}
                                     tableColumns={tableColumnsReducer}
+                                    headerConstant={ORDERLINE_HEADER_DATA}
                                     tableList={orderData.map((data) => {
                                         //TODO: Format strings
                                         data.updatedAt = data.updatedAt.split(".")[0].replace("T", " ")
@@ -386,6 +385,7 @@ const OrderPage = () => {
                                         isResultLoading: isResultLoading,
                                         query: query,
                                         sortItem: sortItem,
+                                        sortItemHeader: sortItemHeader,
                                         sortDirection: sortDirection,
                                         handleSearchSubmit: ((e) => handleSearchSubmit(e)),
                                         handleAutoComplete: ((e) => handleAutoComplete(e)),

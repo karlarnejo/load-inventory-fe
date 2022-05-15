@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { operations as customerPageOperations } from './state';
 import CustomerTable from '../../components/TableTemplate';
 import { Row, Col, Card, Container } from 'react-bootstrap';
-import lodash from 'lodash'
 import { ModalTemplate as AddCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTemplate'
 import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
 import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
 import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
+import { CUSTOMER_HEADER_DATA, DEFAULT_CUSTOMER_SORT_ITEM } from "../../../utils/constants";
 
 const CustomerPage = () => {
 
@@ -25,7 +25,8 @@ const CustomerPage = () => {
     const [query, setQuery] = useState("")
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [isResultLoading, setIsResultLoading] = useState(false)
-    const [sortItem, setSortItem] = useState("firstName")
+    const [sortItem, setSortItem] = useState(DEFAULT_CUSTOMER_SORT_ITEM)
+    const [sortItemHeader, setSortItemHeader] = useState("First Name")
     const [sortDirection, setSortDirection] = useState("Ascending")
     const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
@@ -119,13 +120,14 @@ const CustomerPage = () => {
     }
 
     const handleSortClick = (header) => {
-        const refinedeHeader = lodash.camelCase(header)
-        let tempSortDirection = ""
+        CUSTOMER_HEADER_DATA.map((data) => {
+            if(data.header === header) {
+                setSortItem(data.data)
+                setSortItemHeader(data.header)
+            }
+        })
 
-        sortDirection === "Ascending" ? tempSortDirection = "Descending" : tempSortDirection = "Ascending";
-
-        setSortItem(refinedeHeader)
-        setSortDirection(tempSortDirection)
+        sortDirection === "Ascending" ? setSortDirection("Descending") : setSortDirection("Ascending");
     }
 
     const handleItemPerPageSelect = (event) => {
@@ -256,6 +258,7 @@ const CustomerPage = () => {
                                 <CustomerTable
                                     tableHeader={tableHeaderReducer}
                                     tableColumns={tableColumnsReducer}
+                                    headerConstant={CUSTOMER_HEADER_DATA}
                                     tableList={customerData.map((data) => {
                                         return (data)
                                     })}
@@ -276,6 +279,7 @@ const CustomerPage = () => {
                                         isResultLoading: isResultLoading,
                                         query: query,
                                         sortItem: sortItem,
+                                        sortItemHeader: sortItemHeader,
                                         sortDirection: sortDirection,
                                         handleSearchSubmit: ((e) => handleSearchSubmit(e)),
                                         handleAutoComplete: ((e) => handleAutoComplete(e)),
