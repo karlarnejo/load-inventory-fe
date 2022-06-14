@@ -108,11 +108,10 @@ let TableTemplate = (props) => {
     const pagination = () => {
 
         if (props.tableList) {
-
-            let firstPrev = (!props.pagination.currentPage || props.pagination.currentPage === 1 || props.pagination.totalPages === 0) ? (
+            let firstPrev = (!parseInt(props.pagination.currentPage) || parseInt(props.pagination.currentPage) === 1 || parseInt(props.pagination.totalPages) === 0) ? (
                 true) : false
 
-            let nextLast = (!props.pagination.currentPage || props.pagination.currentPage === props.pagination.totalPages || props.pagination.totalPages === 0) ? (
+            let nextLast = (!parseInt(props.pagination.currentPage) || parseInt(props.pagination.currentPage) === parseInt(props.pagination.totalPages) || parseInt(props.pagination.totalPages) === 0) ? (
                 true) : false
 
             return (
@@ -125,6 +124,7 @@ let TableTemplate = (props) => {
                                     {props.pagination.itemsPerPage}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
+                                    <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='2'>2</Dropdown.Item>
                                     <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='5'>5</Dropdown.Item>
                                     <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='10'>10</Dropdown.Item>
                                     <Dropdown.Item onSelect={props.pagination.handleItemPerPageSelect} eventKey='15'>15</Dropdown.Item>

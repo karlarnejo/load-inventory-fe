@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { REST_SERVICE_URL_ROOT, CLIENT_ID, CLIENT_SECRET, PERSISTED_STATE_KEY } from '../config/settings';
 import Qs from 'qs';
+import { Route } from 'react-router-dom';
+import Error404 from '../views/containers/Errors/404'
 
 class ApiService {
   constructor() {
@@ -57,10 +59,15 @@ class ApiService {
     
     switch (status) {
       case 401:
-        console.error(error);
+        console.error("heha",error);
         break;
       case 404:
-        console.error(error);
+        console.error("daerror",error);
+            <Route 
+                // exact={props.exact}
+                // path={props.path} 
+                component={Error404}
+            />
         break;
       default:
         console.error(error);

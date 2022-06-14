@@ -8,16 +8,17 @@ import { ModalTemplate as ViewCustomerModal } from '../../components/ModalTempla
 import { ModalTemplate as DeleteCustomerModal } from '../../components/ModalTemplate'
 import { FormControlTemplate as CustomerAddForm } from '../../components/FormControlTemplate'
 import { FormControlTemplate as CustomerEditForm } from '../../components/FormControlTemplate'
-import { CUSTOMER_HEADER_DATA, DEFAULT_CUSTOMER_SORT_ITEM } from "../../../utils/constants";
+import { DESCENDING, ASCENDING, SORT_DIRECTION, SORT_ITEM, SEARCH_QUERY, PAGE_INPUT, ITEMS_PER_PAGE, CUSTOMER_HEADER_DATA, DEFAULT_CUSTOMER_SORT_ITEM } from "../../../utils/constants";
+import { updateUrlParameter, uriPusher } from "../../../utils/uriChecker";
 
 const CustomerPage = () => {
 
+    let currentLocation = window.location.href
     const dispatch = useDispatch();
     const isInitialMount = useRef(true);
 
     const tableHeaderReducer = useSelector(state => state.customerPage.table.tableHeader)
     const tableColumnsReducer = useSelector(state => state.customerPage.table.tableColumns)
-    const collapseSidebar = useSelector(state => state.landingePage.collapseSidebar)
 
     const [customerData, setCustomerData] = useState([])
     const [pageInput, setPageInput] = useState(1)
@@ -27,7 +28,7 @@ const CustomerPage = () => {
     const [isResultLoading, setIsResultLoading] = useState(false)
     const [sortItem, setSortItem] = useState(DEFAULT_CUSTOMER_SORT_ITEM)
     const [sortItemHeader, setSortItemHeader] = useState("First Name")
-    const [sortDirection, setSortDirection] = useState("Ascending")
+    const [sortDirection, setSortDirection] = useState(ASCENDING)
     const [showAddCustomerModal, setShowAddCustomerModal] = useState(false)
     const [showViewCustomerModal, setShowViewCustomerModal] = useState(false)
     const [showDeleteCustomerModal, setShowDeleteCustomerModal] = useState(false)
@@ -81,15 +82,52 @@ const CustomerPage = () => {
     const handleCloseDeleteCustomerModal = () => setShowDeleteCustomerModal(false)
 
     // pagination
-    const handleNext = () => setPageInput(parseInt(pageInput) + 1)
-    const handlePrev = () => setPageInput(parseInt(pageInput) - 1)
-    const handleLastPage = () => setPageInput(totalPages)
-    const handleFirstPage = () => setPageInput(1)
+    const handleNext = () => {
+        setPageInput(parseInt(pageInput) + 1)
+
+        let pageInputUrl = updateUrlParameter(currentLocation, PAGE_INPUT, parseInt(pageInput) + 1)
+        uriPusher(pageInputUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+    }
+    const handlePrev = () => {
+        setPageInput(parseInt(pageInput) - 1)
+
+        let pageInputUrl = updateUrlParameter(currentLocation, PAGE_INPUT, parseInt(pageInput) - 1)
+        uriPusher(pageInputUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+    }
+    const handleLastPage = () => {
+        setPageInput(totalPages)
+
+        let pageInputUrl = updateUrlParameter(currentLocation, PAGE_INPUT, totalPages)
+        uriPusher(pageInputUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+    }
+    const handleFirstPage = () => {
+        setPageInput(1)
+
+        let pageInputUrl = updateUrlParameter(currentLocation, PAGE_INPUT, 1)
+        uriPusher(pageInputUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+    }
 
     // table search
-    const handleAutoComplete = (e) => setQuery(e.target.value)
+    const handleAutoComplete = (e) => {
+        setQuery(e.target.value)
+
+        let searchQueryUrl = updateUrlParameter(currentLocation, SEARCH_QUERY, e.target.value)
+        uriPusher(searchQueryUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+    }
 
     const submitForm = () => {
+
+        let search = window.location.search;
+        let params = new URLSearchParams(search);
+
+        if (currentLocation !== "http://localhost:3000/customer") {
+            setSortDirection(params.get('sortDirection'))
+            setQuery(params.get('searchQuery'))
+            setSortItem(params.get('sortItem'))
+            setItemsPerPage(params.get('itemsPerPage'))
+            setPageInput(params.get('pageInput'))
+        }
+
         let payload = {
             searchQuery: query,
             sortDirection: sortDirection,
@@ -114,25 +152,43 @@ const CustomerPage = () => {
             if (re.test(e.target.value)) {
                 if (e.target.value <= totalPages && e.target.value >= 1) {
                     setPageInput(parseInt(e.target.value))
+
+                    uriPusher(currentLocation, PAGE_INPUT, parseInt(e.target.value), false)
                 }
             }
         }
     }
 
     const handleSortClick = (header) => {
+
+        let sortVal = ASCENDING;
+        let sortUrl = ""
+
         CUSTOMER_HEADER_DATA.map((data) => {
-            if(data.header === header) {
+            if (data.header === header) {
                 setSortItem(data.data)
                 setSortItemHeader(data.header)
+
+                sortUrl = updateUrlParameter(currentLocation, SORT_ITEM, data.data)
             }
         })
 
-        sortDirection === "Ascending" ? setSortDirection("Descending") : setSortDirection("Ascending");
+        if (sortDirection === sortVal) { sortVal = DESCENDING }
+
+        setSortDirection(sortVal)
+
+        let sortDirUrl = updateUrlParameter(sortUrl, SORT_DIRECTION, sortVal)
+        uriPusher(sortDirUrl, ITEMS_PER_PAGE, itemsPerPage, false)
+
     }
 
     const handleItemPerPageSelect = (event) => {
+
         setItemsPerPage(parseInt(event))
         setPageInput(1)
+
+        let pageInputUrl = updateUrlParameter(currentLocation, ITEMS_PER_PAGE, parseInt(event))
+        uriPusher(pageInputUrl, PAGE_INPUT, parseInt(1), false)
     }
 
     const handleDeleteCustomer = () => {
@@ -161,6 +217,8 @@ const CustomerPage = () => {
         setGender(e.value)
     }
 
+
+    // Save customer
     const handleSaveCustomer = () => {
 
         let payload = {
@@ -184,6 +242,7 @@ const CustomerPage = () => {
         setShowAddCustomerModal(false)
     }
 
+    // Edit customer
     const handleEditCustomer = () => {
 
         let payload = {
@@ -212,6 +271,12 @@ const CustomerPage = () => {
     const handleClearForm = () => {
         setIsClickedClear(true)
         setQuery("")
+        setSortDirection(ASCENDING)
+        setSortItem(DEFAULT_CUSTOMER_SORT_ITEM)
+        setItemsPerPage(5)
+        setPageInput(1)
+
+        uriPusher("http://localhost:3000/customer", undefined, undefined, true)
     }
 
     const handleOpenDeleteCustomerModal = (e) => {
@@ -232,9 +297,7 @@ const CustomerPage = () => {
             isInitialMount.current = false
         }
         else {
-            if (pageInput) {
-                submitForm()
-            }
+            submitForm()
         }
 
     }, [itemsPerPage, pageInput, sortItem, sortDirection]) //eslint-disable-line
@@ -250,54 +313,52 @@ const CustomerPage = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
-                <Container fluid>
-                    <Row>
-                        <Col xs={12}>
-                            <Card>
-                                <CustomerTable
-                                    tableHeader={tableHeaderReducer}
-                                    tableColumns={tableColumnsReducer}
-                                    headerConstant={CUSTOMER_HEADER_DATA}
-                                    tableList={customerData.map((data) => {
-                                        return (data)
-                                    })}
-                                    rowButtons={[
-                                        { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewCustomerModal(e)) },
-                                        { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
-                                    ]}
-                                    handleSortClick={(e) => handleSortClick(e)}
-                                    handleOpenAddModal={() => handleOpenAddCustomerModal()}
-                                    pagination={{
-                                        name: 'currentPage',
-                                        id: 'currentPage',
-                                        currentPage: pageInput,
-                                        size: 'sm',
-                                        type: "text",
-                                        totalPages: totalPages,
-                                        itemsPerPage: itemsPerPage,
-                                        isResultLoading: isResultLoading,
-                                        query: query,
-                                        sortItem: sortItem,
-                                        sortItemHeader: sortItemHeader,
-                                        sortDirection: sortDirection,
-                                        handleSearchSubmit: ((e) => handleSearchSubmit(e)),
-                                        handleAutoComplete: ((e) => handleAutoComplete(e)),
-                                        handleClearForm: (handleClearForm),
-                                        onChange: ((e) => handleCurrentPage(e)),
-                                        onKeyDown: (() => handleNavigatePage()),
-                                        onClickNext: (() => handleNext()),
-                                        onClickPrev: (() => handlePrev()),
-                                        onClickLast: (() => handleLastPage()),
-                                        onClickFirst: (() => handleFirstPage()),
-                                        handleItemPerPageSelect: handleItemPerPageSelect
-                                    }}
-                                />
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
+            <Container fluid>
+                <Row>
+                    <Col xs={12}>
+                        <Card>
+                            <CustomerTable
+                                tableHeader={tableHeaderReducer}
+                                tableColumns={tableColumnsReducer}
+                                headerConstant={CUSTOMER_HEADER_DATA}
+                                tableList={customerData.map((data) => {
+                                    return (data)
+                                })}
+                                rowButtons={[
+                                    { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewCustomerModal(e)) },
+                                    { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteCustomerModal(e)) }
+                                ]}
+                                handleSortClick={(e) => handleSortClick(e)}
+                                handleOpenAddModal={() => handleOpenAddCustomerModal()}
+                                pagination={{
+                                    name: 'currentPage',
+                                    id: 'currentPage',
+                                    currentPage: pageInput,
+                                    size: 'sm',
+                                    type: "text",
+                                    totalPages: totalPages,
+                                    itemsPerPage: itemsPerPage,
+                                    isResultLoading: isResultLoading,
+                                    query: query,
+                                    sortItem: sortItem,
+                                    sortItemHeader: sortItemHeader,
+                                    sortDirection: sortDirection,
+                                    handleSearchSubmit: ((e) => handleSearchSubmit(e)),
+                                    handleAutoComplete: ((e) => handleAutoComplete(e)),
+                                    handleClearForm: (handleClearForm),
+                                    onChange: ((e) => handleCurrentPage(e)),
+                                    onKeyDown: (() => handleNavigatePage()),
+                                    onClickNext: (() => handleNext()),
+                                    onClickPrev: (() => handlePrev()),
+                                    onClickLast: (() => handleLastPage()),
+                                    onClickFirst: (() => handleFirstPage()),
+                                    handleItemPerPageSelect: handleItemPerPageSelect
+                                }}
+                            />
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
 
             <AddCustomerModal
                 handleCloseModal={() => handleCloseAddCustomerModal()}
@@ -312,12 +373,14 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", data: middleName, onChange: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", data: address, onChange: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", data: contactNo, onChange: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", data: { value: gender, label: gender },
+                            {
+                                name: "Gender", type: "select", data: { value: gender, label: gender },
                                 dropdownChoices: [
                                     { value: "M", label: "M" },
                                     { value: "F", label: "F" }
                                 ],
-                                onInputChange: (handleGenderDropdown) }
+                                onInputChange: (handleGenderDropdown)
+                            }
                         ]}
                     />
                 }
@@ -338,12 +401,14 @@ const CustomerPage = () => {
                             { name: "Middle Name", type: "text", disabled: editDisabled, data: middleName, onChange: ((e) => setMiddleName(e.target.value)) },
                             { name: "Address", type: "text", disabled: editDisabled, data: address, onChange: ((e) => setAddress(e.target.value)) },
                             { name: "Contact No", type: "text", disabled: editDisabled, data: contactNo, onChange: ((e) => setContactNo(e.target.value)) },
-                            { name: "Gender", type: "select", disabled: editDisabled, data: { value: gender, label: gender }, 
+                            {
+                                name: "Gender", type: "select", disabled: editDisabled, data: { value: gender, label: gender },
                                 dropdownChoices: [
                                     { value: "M", label: "M" },
                                     { value: "F", label: "F" }
                                 ],
-                                onInputChange: (handleGenderDropdown) }
+                                onInputChange: (handleGenderDropdown)
+                            }
                         ]}
                     />
                 }

@@ -1,10 +1,32 @@
 import apiService from '../../../../utils/apiService';
 import * as path from './apiRoutes';
 import * as Actions from './actions';
+import { RequestParamSetter } from '../../../../utils/RequestParamSetter';
 
 export const listCustomers = (payload) => (dispatch) => {
 
-    return apiService.post(path.GET_CUSTOMER_LIST, payload)
+    let toBuildObject = []
+    let parameters = "" 
+
+    /*
+        loop to payload and create a json with parameter and value to be used in RequestParamSetter.
+    */
+    for (var key in payload) {
+        let tempObject = {}
+        if (payload.hasOwnProperty(key)) {
+            if(payload[key]) {
+
+                tempObject["param"] = key
+                tempObject["data"] = payload[key]
+
+                toBuildObject.push(tempObject)
+            }
+        }
+    }
+
+    parameters = RequestParamSetter(toBuildObject)
+
+    return apiService.get(path.GET_CUSTOMER_LIST+parameters.toString())
         .then(response => {
             if(response.data.data){
                 dispatch(Actions.listCustomers(response.data.data))

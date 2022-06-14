@@ -146,7 +146,7 @@ const OrderPage = () => {
 
     const handleSortClick = (header) => {
         ORDERLINE_HEADER_DATA.map((data) => {
-            if(data.header === header) {
+            if (data.header === header) {
                 setSortItem(data.data)
                 setSortItemHeader(data.header)
             }
@@ -352,58 +352,56 @@ const OrderPage = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: "#f0f2f5" }} className={"mainContent " + (collapseSidebar ? "open-sidebar" : "close-sidebar")}>
-                <Container fluid>
-                    <Row>
-                        <Col xs={12}>
-                            <Card>
-                                <OrderTable
-                                    tableHeader={tableHeaderReducer}
-                                    tableColumns={tableColumnsReducer}
-                                    headerConstant={ORDERLINE_HEADER_DATA}
-                                    tableList={orderData.map((data) => {
-                                        //TODO: Format strings
-                                        data.updatedAt = data.updatedAt.split(".")[0].replace("T", " ")
-                                        data.createdAt = data.createdAt.split(".")[0].replace("T", " ")
+            <Container fluid>
+                <Row>
+                    <Col xs={12}>
+                        <Card>
+                            <OrderTable
+                                tableHeader={tableHeaderReducer}
+                                tableColumns={tableColumnsReducer}
+                                headerConstant={ORDERLINE_HEADER_DATA}
+                                tableList={orderData.map((data) => {
+                                    //TODO: Format strings
+                                    data.updatedAt = data.updatedAt.split(".")[0].replace("T", " ")
+                                    data.createdAt = data.createdAt.split(".")[0].replace("T", " ")
 
-                                        return (data)
-                                    })}
-                                    rowButtons={[
-                                        { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewOrderModal(e)) },
-                                        { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteOrderModal(e)) }
-                                    ]}
-                                    handleSortClick={(e) => handleSortClick(e)}
-                                    handleOpenAddModal={() => handleOpenAddOrderModal()}
-                                    pagination={{
-                                        name: 'currentPage',
-                                        id: 'currentPage',
-                                        currentPage: pageInput,
-                                        size: 'sm',
-                                        type: "text",
-                                        totalPages: totalPages,
-                                        itemsPerPage: itemsPerPage,
-                                        isResultLoading: isResultLoading,
-                                        query: query,
-                                        sortItem: sortItem,
-                                        sortItemHeader: sortItemHeader,
-                                        sortDirection: sortDirection,
-                                        handleSearchSubmit: ((e) => handleSearchSubmit(e)),
-                                        handleAutoComplete: ((e) => handleAutoComplete(e)),
-                                        handleClearForm: (handleClearForm),
-                                        onChange: ((e) => handleCurrentPage(e)),
-                                        onKeyDown: (() => handleNavigatePage()),
-                                        onClickNext: (() => handleNext()),
-                                        onClickPrev: (() => handlePrev()),
-                                        onClickLast: (() => handleLastPage()),
-                                        onClickFirst: (() => handleFirstPage()),
-                                        handleItemPerPageSelect: handleItemPerPageSelect
-                                    }}
-                                />
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
+                                    return (data)
+                                })}
+                                rowButtons={[
+                                    { variant: "btn btn-info", label: "View", onClick: ((e) => handleOpenViewOrderModal(e)) },
+                                    { variant: "btn btn-danger", label: "Delete", onClick: ((e) => handleOpenDeleteOrderModal(e)) }
+                                ]}
+                                handleSortClick={(e) => handleSortClick(e)}
+                                handleOpenAddModal={() => handleOpenAddOrderModal()}
+                                pagination={{
+                                    name: 'currentPage',
+                                    id: 'currentPage',
+                                    currentPage: pageInput,
+                                    size: 'sm',
+                                    type: "text",
+                                    totalPages: totalPages,
+                                    itemsPerPage: itemsPerPage,
+                                    isResultLoading: isResultLoading,
+                                    query: query,
+                                    sortItem: sortItem,
+                                    sortItemHeader: sortItemHeader,
+                                    sortDirection: sortDirection,
+                                    handleSearchSubmit: ((e) => handleSearchSubmit(e)),
+                                    handleAutoComplete: ((e) => handleAutoComplete(e)),
+                                    handleClearForm: (handleClearForm),
+                                    onChange: ((e) => handleCurrentPage(e)),
+                                    onKeyDown: (() => handleNavigatePage()),
+                                    onClickNext: (() => handleNext()),
+                                    onClickPrev: (() => handlePrev()),
+                                    onClickLast: (() => handleLastPage()),
+                                    onClickFirst: (() => handleFirstPage()),
+                                    handleItemPerPageSelect: handleItemPerPageSelect
+                                }}
+                            />
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
 
             <AddOrderModal
                 handleCloseModal={() => handleCloseAddOrderModal()}
