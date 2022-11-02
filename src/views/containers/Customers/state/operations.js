@@ -10,6 +10,13 @@ export const listCustomers = (payload) => (dispatch) => {
 
     /*
         loop to payload and create a json with parameter and value to be used in RequestParamSetter.
+
+        search query from URI type of search should be passed with:
+
+        json = {
+            param: key,
+            data: keyValue
+        }
     */
     for (var key in payload) {
         let tempObject = {}
